@@ -7,35 +7,35 @@ function Navigation({ className = "" }) {
   const [activeMenu, setActiveMenu] = useState(null);
 
   const navItems = [
-    { path: '/', label: 'Home' },
+    { path: '/', label: 'HOME' },
     {
       path: '/projects',
-      label: 'Projects',
+      label: 'PROJECTS',
       hasSubmenu: true,
       submenu: [
-        { group: 'status', items: [
-          { label: 'Finalized Project', filter: 'finalized' },
-          { label: 'Under Construction', filter: 'under-construction' },
-          { label: 'Proposed Project', filter: 'proposed' },
+        { group: 'STATUS', items: [
+          { label: 'FINALIZED PROJECT', filter: 'finalized' },
+          { label: 'UNDER CONSTRUCTION', filter: 'under-construction' },
+          { label: 'PROPOSED PROJECT', filter: 'proposed' },
         ]},
-        { group: 'category', items: [
-          { label: 'Architecture', filter: 'architecture' },
-          { label: 'Interior', filter: 'interior' },
-          { label: 'Landscape', filter: 'landscape' },
+        { group: 'CATEGORY', items: [
+          { label: 'ARCHITECTURE', filter: 'architecture' },
+          { label: 'INTERIOR', filter: 'interior' },
+          { label: 'LANDSCAPE', filter: 'landscape' },
         ]},
       ]
     },
     {
       path: '/about',
-      label: 'About',
+      label: 'ABOUT',
       hasSubmenu: true,
       submenu: [
-        { label: 'About Us', path: '/about' },
-        { label: 'Partners', path: '/about?tab=partners' },
-        { label: 'Awards', path: '/about?tab=awards' },
+        { label: 'ABOUT US', path: '/about' },
+        { label: 'PARTNERS', path: '/about?tab=partners' },
+        { label: 'AWARDS', path: '/about?tab=awards' },
       ]
     },
-    { path: '/contact', label: 'Contact' },
+    { path: '/contact', label: 'CONTACT' },
   ];
 
   return (
@@ -60,11 +60,14 @@ function Navigation({ className = "" }) {
 
               {/* 子菜单 */}
               {activeMenu === item.path && (
-                <div className="absolute top-full left-0 mt-4">
+                <div className="absolute top-full left-0">
+                  {/* 透明桥接区域 - 填补导航栏到菜单的间隙 */}
+                  <div className="absolute -top-4 left-0 right-0 h-4" />
                   {/* Projects: 分组显示 | About: 垂直列表显示 */}
-                  {item.submenu[0]?.group ? (
-                    /* Projects 分组样式 - 带背景容器 */
-                    <div className="bg-black/30 backdrop-blur-sm rounded-lg py-2 min-w-[200px] overflow-hidden">
+                  <div className="mt-4">
+                    {item.submenu[0]?.group ? (
+                      /* Projects 分组样式 - 带背景容器 */
+                      <div className="bg-black/30 backdrop-blur-sm rounded-lg py-2 min-w-[200px] overflow-hidden">
                         {item.submenu.map(group => (
                           <div key={group.group} className="mb-2 last:mb-0">
                             <div className="px-4 py-1 text-xs text-white/50 uppercase tracking-wider">
@@ -81,21 +84,22 @@ function Navigation({ className = "" }) {
                             ))}
                           </div>
                         ))}
-                    </div>
-                  ) : (
-                    /* About 垂直列表样式 - 带背景容器 */
-                    <div className="bg-black/30 backdrop-blur-sm rounded-lg py-3 min-w-[160px] overflow-hidden">
-                      {item.submenu.map((subItem, idx) => (
-                        <Link
-                          key={idx}
-                          to={subItem.path}
-                          className="block px-6 py-2 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                      </div>
+                    ) : (
+                      /* About 垂直列表样式 - 带背景容器 */
+                      <div className="bg-black/30 backdrop-blur-sm rounded-lg py-3 min-w-[160px] overflow-hidden">
+                        {item.submenu.map((subItem, idx) => (
+                          <Link
+                            key={idx}
+                            to={subItem.path}
+                            className="block px-6 py-2 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+                          >
+                            {subItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>

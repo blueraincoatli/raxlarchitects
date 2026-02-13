@@ -2,41 +2,82 @@ import { useState, useEffect } from 'react';
 import { projects } from '../content/projects';
 import { Link } from 'react-router-dom';
 
-export function HomePage() {
+// 首页轮播图数据 - 支持桌面版和移动版
+const homeSlides = [
+  // 桌面版（横版）- 使用大图
+  { id: 'desktop-1', image: '/images/home/01-gubei', type: 'desktop', project: 'one-park-gubei' },
+  { id: 'desktop-2', image: '/images/home/02-gubei', type: 'desktop', project: 'one-park-gubei' },
+  { id: 'desktop-3', image: '/images/home/03-gubei', type: 'desktop', project: 'one-park-gubei' },
+  { id: 'desktop-4', image: '/images/home/04-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
+  { id: 'desktop-5', image: '/images/home/05-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
+  { id: 'desktop-6', image: '/images/home/06-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
+
+  // 移动版（竖版）- 使用小图
+  { id: 'mobile-1', image: '/images/home/m-01-gubei', type: 'mobile', project: 'one-park-gubei' },
+  { id: 'mobile-2', image: '/images/home/m-02-gubei', type: 'mobile', project: 'one-park-gubei' },
+  { id: 'mobile-3', image: '/images/home/m-03-gubei', type: 'mobile', project: 'one-park-gubei' },
+  { id: 'mobile-4', image: '/images/home/m-04-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
+  { id: 'mobile-5', image: '/images/home/m-05-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
+  { id: 'mobile-6', image: '/images/home/m-06-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
+];
+
+function HomePage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % projects.length);
+    setCurrentIndex((prev) => (prev + 1) % getCurrentSlides().length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
+    setCurrentIndex((prev) => (prev - 1 + getCurrentSlides().length) % getCurrentSlides().length);
   };
 
   const togglePause = () => {
     setIsPaused((prev) => !prev);
   };
 
+  // 检测是否移动端
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-play
   useEffect(() => {
     if (!isPaused) {
       const interval = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % projects.length);
-      }, 5000);
+        setCurrentIndex((prev) => (prev + 1) % getCurrentSlides().length);
+      }, 8000);
       return () => clearInterval(interval);
     }
   }, [isPaused]);
 
-  const currentProject = projects[currentIndex];
+  const getCurrentSlides = () => {
+    return isMobile ? homeSlides.filter(s => s.type === 'mobile') : homeSlides.filter(s => s.type === 'desktop');
+  };
+
+  const currentSlide = getCurrentSlides()[currentIndex];
+  const currentProject = projects.find(p => p.id === currentSlide.project);
+
+  // 图片回退机制：AVIF > WebP > JPG
+  const getImageUrl = (slide) => {
+    return slide.image;  // 不添加扩展名，让 <picture> 元素处理
+  };
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
 
       <div className="relative h-full flex items-center">
-        {projects.map((project, index) => (
+        {getCurrentSlides().map((slide, index) => (
           <div
-            key={project.id}
+            key={slide.id}
             className={`absolute inset-0 transition-all duration-1000 ${
               index === currentIndex ? 'opacity-100' : 'opacity-0'
             }`}
@@ -45,60 +86,63 @@ export function HomePage() {
                      index < currentIndex ? 'translateX(-100%)' : 'translateX(100%)'
             }}
           >
-            <img
-              src={project.gallery[0]}
-              alt={project.name}
-              className="h-screen w-full object-cover"
-            />
+            <picture>
+              <source srcSet={`${slide.image}.avif`} type="image/avif" />
+              <source srcSet={`${slide.image}.webp`} type="image/webp" />
+              <img
+                src={`${slide.image}.jpg`}
+                alt={slide.project ? projects.find(p => p.id === slide.project)?.name : currentSlide.project}
+                className="h-screen w-full object-cover"
+              />
+            </picture>
           </div>
         ))}
       </div>
 
-      <div className="absolute top-8 left-8 z-20">
-        <h1 className="text-3xl font-normal tracking-widest text-white">RA Architects</h1>
+      <div className="absolute inset-0 flex items-center justify-center z-20">
+        {currentProject ? (
+          <div className="text-center">
+            <h2 className="text-3xl md:text-4xl font-normal tracking-wider text-white mb-2">{currentProject.name}</h2>
+            <p className="text-lg md:text-xl text-white/90 mb-6">{currentProject.location}</p>
+            <Link
+              to={`/projects/${currentProject.id}`}
+              className="inline-block px-6 py-2 border border-white/50 text-white hover:bg-white hover:text-gray-900 transition-colors text-sm tracking-wide"
+            >
+              VIEW PROJECT
+            </Link>
+          </div>
+        ) : (
+          <p className="text-white/60">Loading...</p>
+        )}
       </div>
 
-      <div className="absolute bottom-20 left-8 z-20">
-        <h2 className="text-3xl font-normal tracking-wider text-white mb-2">{currentProject.name}</h2>
-        <p className="text-lg text-white/90">{currentProject.location}</p>
-        <Link
-          to={`/projects/${currentProject.id}`}
-          className="inline-block mt-4 px-6 py-2 border border-white/50 text-white hover:bg-white hover:text-gray-900 transition-colors"
-        >
-          View Project -&gt;
-        </Link>
-      </div>
+      {/* 左箭头 */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-8 top-1/2 z-50 text-white/80 hover:text-white transition-colors text-4xl cursor-pointer"
+      >
+        &larr;
+      </button>
 
-      <div className="absolute bottom-8 left-8 right-8 z-10 flex items-center gap-2">
-        <button
-          onClick={prevSlide}
-          className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors text-white"
-        >
-          &larr;
-        </button>
-        <button
-          onClick={togglePause}
-          className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors text-white text-lg"
-        >
-          {isPaused ? '&#9658;' : '&#10074;&#10074;'}
-        </button>
-        <button
-          onClick={nextSlide}
-          className="w-12 h-12 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors text-white"
-        >
-          &rarr;
-        </button>
-        <div className="flex gap-2 ml-4">
-          {projects.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                index === currentIndex ? 'bg-white' : 'bg-white/40'
-              }`}
-            />
-          ))}
-        </div>
+      {/* 右箭头 */}
+      <button
+        onClick={nextSlide}
+        className="absolute right-8 top-1/2 z-50 text-white/80 hover:text-white transition-colors text-4xl cursor-pointer"
+      >
+        &rarr;
+      </button>
+
+      {/* 小圆点指示器 */}
+      <div className="absolute bottom-8 left-1/2 right-1/2 flex justify-center gap-2 z-10">
+        {getCurrentSlides().map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentIndex(index)}
+            className={`w-3 h-3 rounded-full transition-all ${
+              index === currentIndex ? 'bg-white scale-125' : 'bg-white/40 hover:bg-white/60'
+            }`}
+          />
+        ))}
       </div>
     </div>
   );

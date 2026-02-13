@@ -4,8 +4,8 @@
 export const projects = [
   {
     id: 'one-park-gubei',
-    name: '壹方城古北',
-    location: '上海',
+    name: '古北壹号',
+    location: '上海 · 中国',
     client: '万科集团',
     year: '2023',
     grossFloorArea: '120,000 m²',
@@ -24,7 +24,7 @@ export const projects = [
   {
     id: 'royal-pavilion-huashan',
     name: '湖山半岛度假酒店',
-    location: '苏州',
+    location: '苏州 · 中国',
     client: '华润置地',
     year: '2022',
     grossFloorArea: '45,000 m²',
@@ -45,7 +45,7 @@ export const projects = [
   {
     id: 'gubei-art-center',
     name: '古北艺术中心',
-    location: '上海',
+    location: '上海 · 中国',
     client: '上海建工集团',
     year: '2021',
     grossFloorArea: '8,500 m²',
@@ -63,7 +63,7 @@ export const projects = [
   {
     id: 'huashan-peninsula-landscape',
     name: '湖山半岛景观设计',
-    location: '苏州',
+    location: '苏州 · 中国',
     client: '华润置地',
     year: '2022',
     grossFloorArea: '85,000 m²',
@@ -82,7 +82,7 @@ export const projects = [
   {
     id: 'gubei-interior-renovation',
     name: '古北社区中心室内改造',
-    location: '上海',
+    location: '上海 · 中国',
     client: '上海徐汇区政府',
     year: '2023',
     grossFloorArea: '1,200 m²',
@@ -99,7 +99,7 @@ export const projects = [
   {
     id: 'yunhu-tech-park',
     name: '云湖科技园',
-    location: '杭州',
+    location: '杭州 · 中国',
     client: '融创中国',
     year: '2020',
     grossFloorArea: '180,000 m²',
@@ -118,7 +118,7 @@ export const projects = [
   {
     id: 'ancient-town-renovation',
     name: '古北古镇更新',
-    location: '上海',
+    location: '上海 · 中国',
     client: '上海徐汇区政府',
     year: '2019',
     grossFloorArea: '35,000 m²',
@@ -136,7 +136,7 @@ export const projects = [
   {
     id: 'riverside-green-corridor',
     name: '滨江绿色廊道',
-    location: '上海',
+    location: '上海 · 中国',
     client: '上海市绿化局',
     year: '2021',
     grossFloorArea: '65,000 m²',
@@ -153,7 +153,7 @@ export const projects = [
   {
     id: 'urban-living-room',
     name: '城市客厅',
-    location: '上海',
+    location: '上海 · 中国',
     client: '万科集团',
     year: '2020',
     grossFloorArea: '2,800 m²',
@@ -171,7 +171,7 @@ export const projects = [
   {
     id: 'eco-office-tower',
     name: '生态办公楼',
-    location: '上海',
+    location: '上海 · 中国',
     client: '保利发展',
     year: '2024',
     grossFloorArea: '28,000 m²',

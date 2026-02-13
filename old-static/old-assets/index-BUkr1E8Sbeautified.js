@@ -9758,7 +9758,7 @@ const Qr = [
             children: f.jsx("section", {
                 className: "px-[10px]",
                 children: f.jsxs("div", {
-                    className: "grid grid-cols-1 lg:grid-cols-2 gap-[10px]",
+                    className: "columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4",
                     children: [f.jsx("div", {
                         className: "flex flex-col gap-[10px]",
                         children: z.map(h => {
@@ -9840,7 +9840,7 @@ const Qr = [
             }), f.jsx("section", {
                 className: "px-[10px]",
                 children: f.jsxs("div", {
-                    className: "grid grid-cols-1 lg:grid-cols-2 gap-[10px]",
+                    className: "columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 space-y-4",
                     children: [f.jsx("div", {
                         className: "flex flex-col gap-[10px]",
                         children: M.map(Q => {

@@ -1,1 +1,38 @@
+# 源资料目录
 20260212-网站资料整理/
+
+# Dependencies
+node_modules/
+
+# Beautify files (用于编辑，不提交到版本控制)
+*.beautified.js
+*-formatted.css
+
+# 临时文件
+*.tmp
+*.temp
+*.log
+console-*.txt
+screenshot.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Playwright MCP
+.playwright-mcp/
+
+# Claude Code
+.claude/projects/
+.claude/*.jsonl
+
+# 备份文件
+*.backup
+*.bak
+*~

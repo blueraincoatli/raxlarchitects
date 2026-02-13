@@ -1,0 +1,102 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="RA Architects - Shanghai RA Architecture Co., Ltd. Professional architectural design company specializing in urban planning, public and commercial spaces." />
+    <meta name="keywords" content="architecture, design, Shanghai, urban planning, commercial spaces, residential projects" />
+    <meta name="author" content="RA Architects" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <title>RA Architects | Shanghai RA Architecture Co., Ltd.</title>
+    
+    <!-- Preconnect to external domains -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Preload critical fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
+    <script type="module" crossorigin src="/assets/index-BUkr1E8S.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-BQtgnkn3.js">
+    <link rel="modulepreload" crossorigin href="/assets/i18n-CqkHSj4y.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-CVG2TpGm.css">
+    <script>
+      (() => {
+        const SRC_EXT_RE = /\.(png|jpe?g)$/i;
+        const IGNORE_EXT_RE = /\.(avif|webp)$/i;
+
+        function isManagedPath(src) {
+          return typeof src === "string" && src.startsWith("/images/");
+        }
+
+        function withExt(src, ext) {
+          return src.replace(SRC_EXT_RE, "." + ext);
+        }
+
+        function initFallback(img) {
+          if (!img || img.dataset.fallbackInit === "1") return;
+          const currentSrc = img.getAttribute("src");
+          if (!isManagedPath(currentSrc)) return;
+          if (IGNORE_EXT_RE.test(currentSrc)) return;
+          if (!SRC_EXT_RE.test(currentSrc)) return;
+
+          img.dataset.fallbackInit = "1";
+          img.dataset.sourceOriginal = currentSrc;
+
+          const preferredOriginal = currentSrc.toLowerCase().endsWith(".png")
+            ? withExt(currentSrc, "jpg")
+            : currentSrc;
+
+          img.dataset.sourcePreferredOriginal = preferredOriginal;
+          img.dataset.fallbackStage = "avif";
+          img.onerror = () => {
+            const stage = img.dataset.fallbackStage;
+            if (stage === "avif") {
+              img.dataset.fallbackStage = "webp";
+              img.src = withExt(currentSrc, "webp");
+              return;
+            }
+            if (stage === "webp") {
+              img.dataset.fallbackStage = "preferred";
+              img.src = preferredOriginal;
+              return;
+            }
+            if (stage === "preferred" && preferredOriginal !== currentSrc) {
+              img.dataset.fallbackStage = "original";
+              img.src = currentSrc;
+              return;
+            }
+            img.onerror = null;
+          };
+          img.src = withExt(currentSrc, "avif");
+        }
+
+        function scan(root) {
+          root.querySelectorAll?.("img[src]").forEach(initFallback);
+          if (root.tagName === "IMG") initFallback(root);
+        }
+
+        const boot = () => {
+          scan(document);
+          const observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+              m.addedNodes.forEach((n) => {
+                if (n.nodeType === 1) scan(n);
+              });
+            }
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        } else {
+          boot();
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

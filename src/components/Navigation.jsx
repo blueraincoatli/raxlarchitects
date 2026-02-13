@@ -10,6 +10,7 @@ function Navigation({ className = "" }) {
     { path: '/', label: 'HOME' },
     {
       path: '/projects',
+      linkPath: '/all-projects',
       label: 'PROJECTS',
       hasSubmenu: true,
       submenu: [
@@ -52,11 +53,22 @@ function Navigation({ className = "" }) {
               onMouseEnter={() => setActiveMenu(item.path)}
               onMouseLeave={() => setActiveMenu(null)}
             >
-              <span className={`text-lg tracking-wider text-white/80 hover:text-white transition-opacity-300 cursor-pointer ${
-                location.pathname === item.path ? "text-white" : ""
-              }`}>
-                {item.label}
-              </span>
+              {item.linkPath ? (
+                <Link
+                  to={item.linkPath}
+                  className={`text-lg tracking-wider text-white/80 hover:text-white transition-opacity-300 ${
+                    location.pathname === item.path || location.pathname === item.linkPath ? "text-white" : ""
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span className={`text-lg tracking-wider text-white/80 hover:text-white transition-opacity-300 cursor-pointer ${
+                  location.pathname === item.path ? "text-white" : ""
+                }`}>
+                  {item.label}
+                </span>
+              )}
 
               {/* 子菜单 */}
               {activeMenu === item.path && (

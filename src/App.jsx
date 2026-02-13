@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { projects } from './content/projects';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
+import AllProjectsPage from './pages/AllProjectsPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import AboutPage from './pages/AboutPage';
@@ -15,6 +16,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/all-projects" element={<AllProjectsPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
             <Route path="/projects/:id" element={<ProjectDetailPage />} />
             <Route path="/about" element={<AboutPage />} />

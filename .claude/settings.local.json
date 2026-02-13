@@ -54,7 +54,13 @@
       "Bash(dir:*)",
       "Bash(move:*)",
       "Bash(npx eslint:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(cd:*)",
+      "Bash(npx serve:*)",
+      "Bash(npx vite:*)",
+      "mcp__chrome-devtools__hover",
+      "mcp__zai-mcp-server__ui_to_artifact",
+      "mcp__zai-mcp-server__analyze_image"
     ]
   }
 }

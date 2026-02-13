@@ -60,14 +60,11 @@ function Navigation({ className = "" }) {
 
               {/* 子菜单 */}
               {activeMenu === item.path && (
-                <div className="absolute top-full left-0">
-                  {/* 透明桥接区域 */}
-                  <div className="absolute -top-px left-0 right-0 h-px" />
+                <div className="absolute top-full left-0 mt-4">
                   {/* Projects: 分组显示 | About: 垂直列表显示 */}
-                  <div className={`mt-2 ${item.submenu[0]?.group ? 'bg-black/70 backdrop-blur-sm rounded-lg py-2 min-w-[200px]' : 'bg-black/70 backdrop-blur-sm rounded-lg py-3 min-w-[160px]'}`}>
-                    {item.submenu[0]?.group ? (
-                      /* Projects 分组样式 */
-                      <div>
+                  {item.submenu[0]?.group ? (
+                    /* Projects 分组样式 - 带背景容器 */
+                    <div className="bg-black/30 backdrop-blur-sm rounded-lg py-2 min-w-[200px] overflow-hidden">
                         {item.submenu.map(group => (
                           <div key={group.group} className="mb-2 last:mb-0">
                             <div className="px-4 py-1 text-xs text-white/50 uppercase tracking-wider">
@@ -84,22 +81,21 @@ function Navigation({ className = "" }) {
                             ))}
                           </div>
                         ))}
-                      </div>
-                    ) : (
-                      /* About 垂直列表样式 */
-                      <div className="bg-black/70 backdrop-blur-sm rounded-lg py-3 min-w-[160px]">
-                        {item.submenu.map((subItem, idx) => (
-                          <Link
-                            key={idx}
-                            to={subItem.path}
-                            className="block px-6 py-2 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
-                          >
-                            {subItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  ) : (
+                    /* About 垂直列表样式 - 带背景容器 */
+                    <div className="bg-black/30 backdrop-blur-sm rounded-lg py-3 min-w-[160px] overflow-hidden">
+                      {item.submenu.map((subItem, idx) => (
+                        <Link
+                          key={idx}
+                          to={subItem.path}
+                          className="block px-6 py-2 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors whitespace-nowrap"
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>

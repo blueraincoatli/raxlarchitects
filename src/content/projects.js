@@ -23,8 +23,8 @@ export const projects = [
   },
   {
     id: 'royal-pavilion-huashan',
-    name: '湖山半岛度假酒店',
-    location: '苏州 · 中国',
+    name: '华山公寓',
+    location: '上海 · 中国',
     client: '华润置地',
     year: '2022',
     grossFloorArea: '45,000 m²',
@@ -40,7 +40,7 @@ export const projects = [
       '/images/projects/royal-pavilion-huashan/05.jpg',
       '/images/projects/royal-pavilion-huashan/06.jpg',
     ],
-    description: '位于太湖之滨的精品度假酒店，以江南园林为设计灵感，打造私密宁静的度假体验。建筑设计强调与自然环境的和谐共生，采用大量本土材料和可持续设计策略。',
+    description: '位于上海市核心区的高端住宅公寓项目，融合现代城市生活与自然景观视野。设计强调空间功能性与居住品质，采用开放式布局和精选材料营造舒适居住体验。',
   },
   {
     id: 'gubei-art-center',

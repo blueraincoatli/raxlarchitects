@@ -1,114 +1,116 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance for agents working in this repository.
 
-## 项目概述
+## Project Overview
 
-这是一个 RA Architects（上海锐点建筑设计有限公司）的静态网站快照。网站采用现代图片格式（AVIF/WebP）和渐进式回退机制优化图片加载。
+RA Architects website is a modern React SPA showcasing architectural projects with progressive image loading and bilingual content (Chinese/English).
 
-### 目录结构
+**Tech Stack:**
+- React 18.3.1 with React Router DOM 6.26.2
+- Vite 5.2.0 for fast development and optimized builds
+- Tailwind CSS (via CDN) for styling
+- Progressive image loading (AVIF → WebP → JPG fallback)
 
+## Architecture
+
+### Directory Structure
 ```
-├── index.html              # 应用入口，加载打包的 CSS/JS
-├── assets/                 # 编译后的前端打包文件
-│   ├── index-*.js         # 主应用代码
-│   ├── vendor-*.js        # 第三方库
-│   ├── i18n-*.js          # 国际化文本数据
-│   └── index-*.css        # 样式文件
-├── images/                 # 运行时图片资源
-│   ├── home/              # 首页轮播图
-│   ├── projects/          # 项目缩略图
-│   ├── about/             # 关于页面图片
-│   └── original/          # 原始图片存档
-├── 20260212-网站资料整理/  # 源参考材料（文档、截图等）
-└── scripts/                # 工具脚本
+src/
+├── components/
+│   └── PictureImage.jsx    # Progressive image component with format fallback
+├── pages/
+│   ├── HomePage.jsx         # Hero carousel with desktop/mobile variants
+│   ├── ProjectsPage.jsx     # Featured projects grid
+│   ├── AllProjectsPage.jsx  # Complete project listing
+│   ├── ProjectDetailPage.jsx # Individual project gallery
+│   ├── UnderConstructionPage.jsx
+│   ├── ProposedProjectsPage.jsx
+│   ├── AboutPage.jsx        # About, partners, awards (query param tabs)
+│   └── ContactPage.jsx
+├── content/
+│   └── projects.js          # Project data array (11 projects)
+└── App.jsx                 # Route definitions with BrowserRouter
 ```
 
-## 开发命令
+### Key Patterns
 
-### 本地服务器
+**Progressive Image Loading:**
+- Uses `<picture>` element with AVIF → WebP → JPG fallback
+- `PictureImage` component auto-strips extensions and adds format sources
+- Applied globally: home carousel, project galleries, throughout site
+
+**Project Data Structure:**
+```javascript
+{
+  id: 'one-park-gubei',
+  name: '古北壹号',
+  status: 'finalized',           // finalized|under-construction|proposed
+  category: 'architecture',       // architecture|interior|other
+  imagePath: '/images/projects/01-one-park-gubei',
+  gallery: ['/images/projects/one-park-gubei/01-...', ...],
+  description: '...'
+}
+```
+
+**Routing:**
+- Home: `/`
+- Projects: `/projects`, `/all-projects`, `/projects/:id`
+- Filtered: `/under-construction`, `/proposed`, `/projects?filter=architecture`
+- About: `/about?tab=partners` (default: about us)
+- Contact: `/contact`
+
+## Commands
+
+### Development
 ```bash
-# Python HTTP 服务器
-python -m http.server 8080
-
-# 或使用 npx serve
-npx serve .
+npm run dev              # Start dev server (port 3000, auto-opens)
+npm run build            # Production build to dist/
+npm run preview          # Preview production build
+npm run check            # Syntax check JS/JSX files
 ```
 
-访问 `http://localhost:8080` 验证网站。
-
-### 图片变体生成
+### Image Processing
 ```bash
-# 生成 AVIF/WebP 变体（需要 ffmpeg）
-pwsh -File scripts/generate-image-variants.ps1
+# Generate AVIF/WebP/JPG variants (requires FFmpeg)
+node scripts/compress-images.js
 
-# 强制重新生成所有变体
-pwsh -File scripts/generate-image-variants.ps1 -Force
-
-# 自定义质量参数
-pwsh -File scripts/generate-image-variants.ps1 -AvifCrf 35 -WebpQuality 80
+# Process projects root directory
+node scripts/compress-projects-root.js
 ```
 
-### 文档文本提取
-```bash
-# 从源 docx 文件提取文本到 content/source-text/
-pwsh -File scripts/extract-docx-text.ps1
-```
+**Image Processing Details:**
+- Max width: 2500px
+- Generates: AVIF (crf 35), WebP (quality 82), JPG (q 3)
+- Renames to 01.jpg, 02.jpg, etc. per project folder
+- Requires FFmpeg installed and available in PATH
 
-### 文本覆盖
-```bash
-# 应用文本覆盖到打包文件
-pwsh -File scripts/apply-text-overrides.ps1
-```
+## Content Update Workflow
 
-## 架构说明
+### Adding/Updating Projects
+1. Add images to `images/projects/[project-name]/`
+2. Run image compression script to generate variants
+3. Add entry to `src/content/projects.js`:
+   - Set `id` (kebab-case), `name`, `status`, `category`
+   - Point `imagePath` to project folder
+   - Add gallery images (without extensions)
+4. Build and verify: `npm run build`
 
-### 图片加载机制
+### Updating Existing Content
+- **Text:** Edit `src/content/projects.js` descriptions
+- **Images:** Replace in `images/`, re-run compression script
+- **Navigation:** Modify `src/components/Navigation.jsx`
+- **Styling:** Tailwind classes in components (no build step for CSS)
 
-网站使用渐进式图片加载策略：
-1. 首先尝试加载 AVIF 格式（最佳压缩）
-2. 失败后回退到 WebP
-3. 再失败回退到首选原始格式（PNG 源则用 JPG）
-4. 最后回退到原始文件
+### Source Material Mapping
+Reference docs in `docs/` map source files to runtime locations:
+- `docs/source-asset-map.md` - Source folder → runtime paths
+- `docs/english-mapping-status.md` - English translation status
 
-此逻辑在 `index.html` 的内联脚本中实现，通过 MutationObserver 监听 DOM 变化以处理动态加载的图片。
+## Important Notes
 
-### 内容管理
-
-- **源材料位置**: `20260212-网站资料整理/0406-发出版本/`
-- **文本映射**: 参见 `docs/source-asset-map.md`
-- **项目清单**: 参见 `docs/project-text-checklist.md`
-- **英文本地化状态**: 参见 `docs/english-mapping-status.md`
-
-### 国际化 (i18n)
-
-文本数据存储在 `assets/i18n-*.js` 中。当前站点主要使用中文，英文翻译通过脚本直接修改打包文件实现。
-
-## 内容更新工作流
-
-1. **添加新项目**:
-   - 将图片放入 `images/projects/`
-   - 运行图片变体生成脚本
-   - 编辑 `assets/index-BUkr1E8S.js` 添加项目数据
-
-2. **更新文本**:
-   - 修改 `assets/i18n-*.js` 中的文本值
-   - 或使用 `apply-text-overrides.ps1` 脚本
-
-3. **替换图片**:
-   - 替换 `images/` 下对应文件
-   - 重新运行图片变体生成脚本
-
-## 编码规范
-
-- HTML/CSS 使用 2 空格缩进
-- 文件名使用小写和连字符（kebab-case）
-- 保持 UTF-8 编码
-- 路径引用使用相对于仓库根目录的 web 安全路径
-
-## 注意事项
-
-- 这是一个预构建的快照，没有源项目可用
-- 避免手动编辑压缩后的打包文件
-- 优先通过替换 `images/` 中的文件和最小化 `index.html` 更改来更新内容
-- `20260212-网站资料整理/` 目录仅作为参考，不是运行时代码
+- **Dark theme:** Site uses `#0a0a0a` background (Tailwind `bg-[#0a0a0a]`)
+- **Path alias:** `@` maps to `/src` (configured in vite.config.js)
+- **Code splitting:** React and React Router in separate chunks
+- **Never edit `dist/` directly** - always rebuild from source
+- **Reference material:** `20260212-网站资料整理/` is source-only, not used at runtime

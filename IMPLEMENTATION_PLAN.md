@@ -1,4 +1,7 @@
-# RA Architects 网站重构计划
+# RA Architects 网站重构计划（归档）
+
+> 状态说明：本文件为早期重构计划归档，部分结构/技术描述已不再与当前代码完全一致。  
+> 以当前仓库实现为准：`src/` + React Router + Vite 构建（`npm run build`）。
 
 ## 项目概述
 完全重写 RA Architects 网站，使用 React + Tailwind CSS，参考现有设计和用户需求。
@@ -8,7 +11,7 @@
 - **路由**: React Router v6（已使用）
 - **状态管理**: React Hooks（useState, useEffect, useContext）
 - **样式**: Tailwind CSS 3.4（通过 CDN）
-- **构建**: Terser（静态网站）
+- **构建**: Vite（`npm run build` 输出到 `dist/`）
 - **字体**: Google Inter（300, 400, 500, 600）
 
 ## 项目结构

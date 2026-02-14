@@ -1,6 +1,6 @@
 # English Mapping Status
 
-Scope: project names and key fields in `assets/index-BUkr1E8S.js`.
+Scope: project names and key fields in `src/content/projects.js`.
 
 ## Confirmed Mappings (applied)
 - `one-park-gubei` -> `ONE PARK GUBEI`

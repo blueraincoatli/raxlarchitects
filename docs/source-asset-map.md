@@ -54,4 +54,6 @@ This file maps the source package at `20260212-网站资料整理/0406-发出版
 ## Variant Policy Implemented
 - Image delivery priority now targets: `avif` -> `webp` -> original.
 - For original `.png` sources, `.jpg` fallback assets are generated when possible.
-- Batch generation script: `scripts/generate-image-variants.ps1`
+- Batch compression scripts:
+  - `scripts/compress-images.js`
+  - `scripts/compress-projects-root.js`

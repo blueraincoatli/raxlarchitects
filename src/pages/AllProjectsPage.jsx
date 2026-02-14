@@ -20,7 +20,7 @@ function AllProjectsPage() {
               to={`/projects/${project.id}`}
               className="break-inside-avoid block group"
             >
-              <div className="relative overflow-hidden transition-transform hover:scale-[1.02]">
+              <div className="relative overflow-hidden">
                 <img
                   src={project.imagePath}
                   alt={project.name}
@@ -54,7 +54,7 @@ function AllProjectsPage() {
               to={`/projects/${project.id}`}
               className="break-inside-avoid block group"
             >
-              <div className="relative overflow-hidden transition-transform hover:scale-[1.02]">
+              <div className="relative overflow-hidden">
                 <img
                   src={project.imagePath}
                   alt={project.name}

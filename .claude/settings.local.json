@@ -65,7 +65,10 @@
       "Bash(timeout:*)",
       "Bash(curl:*)",
       "Bash(pwsh:*)",
-      "Bash(ffmpeg:*)"
+      "Bash(ffmpeg:*)",
+      "Bash(for:*)",
+      "Bash(do basename:*)",
+      "Bash(done)"
     ]
   }
 }

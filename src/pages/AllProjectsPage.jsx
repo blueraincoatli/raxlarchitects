@@ -30,13 +30,13 @@ function AllProjectsPage() {
                 {/* 文字叠加 - 左下角 */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                   <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
-                    <h3 className="text-lg font-light text-white drop-shadow-lg">
+                    <h3 className="text-sm font-light text-white drop-shadow-lg">
                       {project.name}
                     </h3>
                     <p className="text-sm text-white/80 drop-shadow-md">
                       {project.location}
                     </p>
-                    <span className="text-xs text-white/60 uppercase tracking-wider">
+                    <span className="text-sm text-white/60 uppercase tracking-wider">
                       {project.statusLabel} · {project.categoryLabel}
                     </span>
                   </div>
@@ -64,13 +64,13 @@ function AllProjectsPage() {
                 {/* 文字叠加 - 左下角 */}
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                   <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
-                    <h3 className="text-lg font-light text-white drop-shadow-lg">
+                    <h3 className="text-sm font-light text-white drop-shadow-lg">
                       {project.name}
                     </h3>
                     <p className="text-sm text-white/80 drop-shadow-md">
                       {project.location}
                     </p>
-                    <span className="text-xs text-white/60 uppercase tracking-wider">
+                    <span className="text-sm text-white/60 uppercase tracking-wider">
                       {project.statusLabel} · {project.categoryLabel}
                     </span>
                   </div>

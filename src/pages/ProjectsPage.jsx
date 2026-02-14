@@ -1,65 +1,99 @@
-import { useState } from 'react';
 import { projects } from '../content/projects';
 import { Link } from 'react-router-dom';
 
+// 项目卡片组件
+function ProjectCard({ project, className = '', aspectRatio = 'aspect-[16/9]' }) {
+  return (
+    <div className={`relative group cursor-pointer overflow-hidden ${className}`}>
+      <div className={`relative w-full ${aspectRatio}`}>
+        <img
+          src={project.imagePath}
+          alt={project.name}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        <div className="absolute bottom-4 left-4 z-10">
+          <h3 className="text-sm font-normal tracking-wider text-white uppercase">{project.name}</h3>
+          <p className="text-xs text-white/80">{project.location}</p>
+        </div>
+        <Link
+          to={`/projects/${project.id}`}
+          className="absolute inset-0 z-20 hover:bg-white/10 transition-colors"
+        />
+      </div>
+    </div>
+  );
+}
+
 export function ProjectsPage() {
-  const [filterCategory, setFilterCategory] = useState('');
-
-  const filteredProjects = projects.filter(project => {
-    if (filterCategory && project.category !== filterCategory) return false;
-    return true;
-  });
-
-  const categoryFilters = [
-    { key: '', label: '全部' },
-    { key: 'architecture', label: '建筑' },
-    { key: 'landscape', label: '景观' },
-    { key: 'interior', label: '室内' },
-  ];
+  // 按照参考布局分配项目
+  // 第1行: 全宽 - 古北壹号
+  const row1Project = projects.find(p => p.id === 'one-park-gubei');
+  
+  // 第2行: 60/40 - 华山公寓(60%) + 尚东鼎(40%)
+  const row2Left = projects.find(p => p.id === 'royal-pavilion');
+  const row2Right = projects.find(p => p.id === 'upper-east');
+  
+  // 第3行: 全宽 - 杭州融信
+  const row3Project = projects.find(p => p.id === 'rongxinarc');
+  
+  // 第4行: 左侧双图堆叠 + 右侧2x2矩阵
+  // 左侧: Chairclub + Content Office
+  const row4LeftTop = projects.find(p => p.id === 'chairclub');
+  const row4LeftBottom = projects.find(p => p.id === 'content-office-shop');
+  // 右侧: Content Show (使用gallery图片填充4格)
+  const row4Right = projects.find(p => p.id === 'content-show');
 
   return (
     <div className="min-h-screen pt-16 bg-[#0a0a0a]">
-      <section className="sticky top-16 z-40 bg-[#0a0a0a]/95 backdrop-blur-sm py-4 px-6">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center gap-2 px-4">
-          {categoryFilters.map(filter => (
-            <button
-              key={filter.key}
-              onClick={() => setFilterCategory(filter.key)}
-              className={`px-4 py-2 text-sm font-medium tracking-wide uppercase transition-colors ${
-                filterCategory === filter.key ? 'bg-white text-gray-900' : 'bg-white/10 hover:bg-white/20 text-white'
-              }`}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4 px-6 py-8">
-        {filteredProjects.map(project => (
-          <div key={project.id} className="break-inside-avoid mb-4 relative group cursor-pointer">
-            <div className="relative overflow-hidden rounded-lg">
-              <img
-                src={project.gallery[0]}
-                alt={project.name}
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 z-10">
-                <h3 className="text-lg font-normal tracking-wider text-white uppercase">{project.name}</h3>
-                <p className="text-sm text-white/90 opacity-80">{project.location}</p>
-              </div>
-              <Link
-                to={`/projects/${project.id}`}
-                className="absolute inset-0 z-20 hover:bg-white/20 transition-colors"
-              >
-                <span className="absolute top-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity text-2xl">
-                  &rarr;
-                </span>
-              </Link>
-            </div>
+      <div className="w-full mx-auto px-3 py-8">
+        {/* 第1行: 全宽大图 */}
+        {row1Project && (
+          <div className="mb-3">
+            <ProjectCard project={row1Project} aspectRatio="aspect-[21/9]" />
           </div>
-        ))}
+        )}
+
+        {/* 第2行: 60/40 双栏，高度为第1行的一半 */}
+        <div className="flex gap-3 mb-3">
+          {row2Left && (
+            <div className="w-[60%]">
+              <ProjectCard project={row2Left} aspectRatio="aspect-[14/5]" />
+            </div>
+          )}
+          {row2Right && (
+            <div className="w-[40%]">
+              <ProjectCard project={row2Right} aspectRatio="aspect-[9.33/5]" />
+            </div>
+          )}
+        </div>
+
+        {/* 第3行: 全宽大图 */}
+        {row3Project && (
+          <div className="mb-3">
+            <ProjectCard project={row3Project} aspectRatio="aspect-[16/6]" />
+          </div>
+        )}
+
+        {/* 第4行: 左侧双图堆叠 + 右侧单图 */}
+        <div className="flex gap-3">
+          {/* 左侧: 双图堆叠 (50%宽度) */}
+          <div className="w-1/2 flex flex-col gap-3">
+            {row4LeftTop && (
+              <ProjectCard project={row4LeftTop} aspectRatio="aspect-[32/9]" />
+            )}
+            {row4LeftBottom && (
+              <ProjectCard project={row4LeftBottom} aspectRatio="aspect-[32/9]" />
+            )}
+          </div>
+
+          {/* 右侧: Content Show 单图 (50%宽度) */}
+          <div className="w-1/2">
+            {row4Right && (
+              <ProjectCard project={row4Right} aspectRatio="aspect-[16/9]" className="h-full" />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

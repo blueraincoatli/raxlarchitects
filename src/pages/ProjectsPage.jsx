@@ -13,8 +13,17 @@ function ProjectCard({ project, className = '', aspectRatio = 'aspect-[16/9]' })
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         <div className="absolute bottom-4 left-4 z-10">
-          <h3 className="text-sm font-normal tracking-wider text-white uppercase">{project.name}</h3>
-          <p className="text-xs text-white/80">{project.location}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
+            <h3 className="text-sm font-bold text-white drop-shadow-lg">
+              {project.name}
+            </h3>
+            <p className="text-sm text-white/80 drop-shadow-md">
+              {project.location}
+            </p>
+            <span className="text-sm text-white/60 uppercase tracking-wider">
+              {project.statusLabel} · {project.categoryLabel}
+            </span>
+          </div>
         </div>
         <Link
           to={`/projects/${project.id}`}

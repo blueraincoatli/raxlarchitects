@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useState } from 'react';
 import PictureImage from '../components/PictureImage';
@@ -22,55 +22,44 @@ export function ProjectDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Link to="/projects" className="fixed top-20 left-4 z-50 text-white hover:opacity-70 transition-opacity-300 flex items-center gap-2">
-        <span className="text-xl">&larr;</span>
-        <span>Back to Projects</span>
-      </Link>
+      {/* 主图片区域 - 撑满页面高度 */}
+      <div className="relative h-screen w-full">
+        <PictureImage
+          imagePath={images[currentImageIndex]}
+          alt={`${project.name} - Image ${currentImageIndex + 1}`}
+          className="h-screen w-full object-cover"
+        />
 
-      <div className="pt-16 pb-8 px-4">
-        <div className="relative max-w-6xl mx-auto mb-8">
-          <div className="relative bg-black/20 rounded-2xl overflow-hidden">
-            <PictureImage
-              imagePath={images[currentImageIndex]}
-              alt={`${project.name} - Image ${currentImageIndex + 1}`}
-              className="w-full h-auto max-h-[70vh] object-contain"
-            />
+        {/* 左右切换箭头放到页面左右两端 */}
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={prevImage}
+              className="absolute left-0 top-1/2 z-10 w-16 h-16 rounded-full bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
+            >
+              &larr;
+            </button>
+            <button
+              onClick={nextImage}
+              className="absolute right-0 top-1/2 z-10 w-16 h-16 rounded-full bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
+            >
+              &rarr;
+            </button>
+          </>
+        )}
 
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
-                >
-                  &larr;
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
-                >
-                  &rarr;
-                </button>
-              </>
-            )}
-
-            {images.length > 1 && (
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-                {images.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`w-3 h-3 rounded-full transition-all ${
-                      currentImageIndex === index ? 'bg-white scale-125' : 'bg-white/40'
-                    }`}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+        {/* 项目名在图片左下角 */}
+        <div className="absolute bottom-8 left-8 z-10">
+          <h2 className="text-2xl md:text-3xl font-normal tracking-wider text-white drop-shadow-lg mb-2">{project.name}</h2>
+          <p className="text-base md:text-lg text-white/90 drop-shadow-md">{project.location}</p>
+          <p className="text-sm text-white/70 uppercase tracking-wider">{project.statusLabel} · {project.categoryLabel}</p>
         </div>
+      </div>
 
-        <div className="max-w-4xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8">
-          <h1 className="text-3xl font-normal tracking-wider text-white mb-4">{project.name}</h1>
+      {/* 文字介绍 - 需要向下滚动查看 */}
+      <div className="relative z-10 -mt-32">
+        <div className="max-w-4xl mx-auto px-8 py-12">
+          <h1 className="text-3xl md:text-4xl font-normal tracking-wider text-white mb-6">{project.name}</h1>
 
           <div className="space-y-3 text-white/90">
             <p className="text-lg text-white">{project.location}</p>
@@ -93,7 +82,7 @@ export function ProjectDetailPage() {
           </div>
 
           {project.description && (
-            <div className="mt-6 pt-6 border-t border-white/20">
+            <div className="mt-8 pt-8 border-t border-white/10">
               <p className="text-white/80 leading-relaxed">{project.description}</p>
             </div>
           )}

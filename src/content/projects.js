@@ -1,43 +1,8 @@
 // 项目数据
 // 用于首页轮播和项目页面瀑布流展示
-// 按照参考目录顺序排列
+// 按照images/projects目录的数字序号排列
 
 export const projects = [
-  {
-    id: 'content-office-shop',
-    name: '城市客厅',
-    location: '上海 · 中国',
-    client: '万科集团',
-    year: '2020',
-    grossFloorArea: '2,800 m²',
-    status: 'finalized',
-    statusLabel: '已完成',
-    category: 'interior',
-    categoryLabel: '室内',
-    gallery: [
-      '/images/projects/content-office-shop/01.jpg',
-      '/images/projects/content-office-shop/02.jpg',
-      '/images/projects/content-office-shop/03.jpg',
-    ],
-    description: '社区公共空间室内设计,以"城市客厅"为概念,打造居民共享的多功能空间。设计强调灵活可变性和社区参与感。',
-  },
-  {
-    id: 'contentshow',
-    name: '滨江绿色廊道',
-    location: '上海 · 中国',
-    client: '上海市绿化局',
-    year: '2021',
-    grossFloorArea: '65,000 m²',
-    status: 'proposed',
-    statusLabel: '提案中',
-    category: 'landscape',
-    categoryLabel: '景观',
-    gallery: [
-      '/images/projects/contentshow/01.jpg',
-      '/images/projects/contentshow/02.jpg',
-    ],
-    description: '黄浦江沿岸生态廊道规划项目,以生态修复和公众可达性为核心目标。设计构建连续的步行系统和多层次生境系统,提升城市滨水空间品质。',
-  },
   {
     id: 'one-park-gubei',
     name: '古北壹号',
@@ -55,7 +20,7 @@ export const projects = [
       '/images/projects/one-park-gubei/03.jpg',
       '/images/projects/one-park-gubei/04.jpg',
     ],
-    description: '古北地区的城市更新项目,融合传统与现代,打造宜居社区。设计理念源于对上海里弄文化的现代诠释,通过创新的空间组织方式,实现高密度环境下的居住品质提升。',
+    description: '古北地区的城市更新项目，融合传统与现代，打造宜居社区。设计理念源于对上海里弄文化的现代诠释，通过创新的空间组织方式，实现高密度环境下的居住品质提升。',
   },
   {
     id: 'royal-pavilion',
@@ -76,7 +41,7 @@ export const projects = [
       '/images/projects/royal-pavilion/05.jpg',
       '/images/projects/royal-pavilion/06.jpg',
     ],
-    description: '位于上海市核心区的高端住宅公寓项目,融合现代城市生活与自然景观视野。设计强调空间功能性与居住品质,采用开放式布局和精选材料营造舒适居住体验。',
+    description: '位于上海市核心区的高端住宅公寓项目，融合现代城市生活与自然景观视野。设计强调空间功能性与居住品质，采用开放式布局和精选材料营造舒适居住体验。',
   },
   {
     id: 'shanghai-pudi',
@@ -95,7 +60,7 @@ export const projects = [
       '/images/projects/shanghai-pudi/03.jpg',
       '/images/projects/shanghai-pudi/04.jpg',
     ],
-    description: '上海浦东新区的高端住宅项目,以"璞玉"为设计理念,打造现代都市中的精致居住空间。建筑形态与室内空间高度统一,创造流动的生活体验。',
+    description: '上海浦东新区的高端住宅项目，以"璞玉"为设计理念，打造现代都市中的精致居住空间。建筑形态与室内空间高度统一，创造流动的生活体验。',
   },
   {
     id: 'rongxinarc',
@@ -114,7 +79,7 @@ export const projects = [
       '/images/projects/rongxinarc/03.jpg',
       '/images/projects/rongxinarc/04.jpg',
     ],
-    description: '创新型科技园区,以"产城融合"为设计理念,打造工作、生活、学习一体化的创新生态系统。建筑群体采用模块化设计策略,适应未来发展需求。',
+    description: '创新型科技园区，以"产城融合"为设计理念，打造工作、生活、学习一体化的创新生态系统。建筑群体采用模块化设计策略，适应未来发展需求。',
   },
   {
     id: 'macalline-anji',
@@ -132,7 +97,7 @@ export const projects = [
       '/images/projects/macalline-anji/02.jpg',
       '/images/projects/macalline-anji/03.jpg',
     ],
-    description: '安吉竹林中的度假别墅设计,以"隐逸山林"为设计理念,创造与自然共生的居住体验。建筑采用乡土材料和被动式设计策略,实现环境可持续性。',
+    description: '安吉竹林中的度假别墅设计，以"隐逸山林"为设计理念，创造与自然共生的居住体验。建筑采用乡土材料和被动式设计策略，实现环境可持续性。',
   },
   {
     id: 'upper-east',
@@ -151,7 +116,7 @@ export const projects = [
       '/images/projects/upper-east/03.jpg',
       '/images/projects/upper-east/04.jpg',
     ],
-    description: '品尊国际项目的第三期开发,延续前期的城市更新理念,进一步融合现代居住功能与历史建筑肌理。设计强调空间创新与社区活力。',
+    description: '品尊国际项目的第三期开发，延续前期的城市更新理念，进一步融合现代居住功能与历史建筑肌理。设计强调空间创新与社区活力。',
   },
   {
     id: 'moment-to-cloud',
@@ -170,7 +135,7 @@ export const projects = [
       '/images/projects/moment-to-cloud/03.jpg',
       '/images/projects/moment-to-cloud/04.jpg',
     ],
-    description: '开化老城区的城市更新项目,融合传统建筑文化与现代都市功能。设计理念源于对开化历史街区的当代诠释,创造适应现代生活需求的文化社区。',
+    description: '开化老城区的城市更新项目，融合传统建筑文化与现代都市功能。设计理念源于对开化历史街区的当代诠释，创造适应现代生活需求的文化社区。',
   },
   {
     id: 'lot-hk231',
@@ -189,7 +154,7 @@ export const projects = [
       '/images/projects/lot-hk231/03.jpg',
       '/images/projects/lot-hk231/04.jpg',
     ],
-    description: '嘉兴滨湖新区的高端住宅项目,以"彩虹之桥"为设计灵感,创造连接自然与都市的居住空间。设计强调水岸空间与建筑形态的有机融合。',
+    description: '嘉兴滨湖新区的高端住宅项目，以"虹桥之韵"为设计灵感，创造连接自然与都市的居住空间。设计强调水岸空间与建筑形态的有机融合。',
   },
   {
     id: 'chairclub',
@@ -210,6 +175,41 @@ export const projects = [
       '/images/projects/chairclub/05.jpg',
       '/images/projects/chairclub/06.jpg',
     ],
-    description: '上海法租界内的历史建筑室内改造项目,以"Chair Club"为设计主题,创造融合当代艺术与历史氛围的会员制空间。设计强调材料对话与空间叙事。',
+    description: '上海法租界内的历史建筑室内改造项目，以"Chair Club"为设计主题，创造融合当代艺术与历史氛围的会员制空间。设计强调材料对话与空间叙事。',
+  },
+  {
+    id: 'content-office-shop',
+    name: '城市客厅',
+    location: '上海 · 中国',
+    client: '万科集团',
+    year: '2020',
+    grossFloorArea: '2,800 m²',
+    status: 'finalized',
+    statusLabel: '已完成',
+    category: 'interior',
+    categoryLabel: '室内',
+    gallery: [
+      '/images/projects/content-office-shop/01.jpg',
+      '/images/projects/content-office-shop/02.jpg',
+      '/images/projects/content-office-shop/03.jpg',
+    ],
+    description: '社区公共空间室内设计，以"城市客厅"为概念，打造居民共享的多功能空间。设计强调灵活可变性和社区参与感。',
+  },
+  {
+    id: 'contentshow',
+    name: '滨江绿色廊道',
+    location: '上海 · 中国',
+    client: '上海市绿化局',
+    year: '2021',
+    grossFloorArea: '65,000 m²',
+    status: 'proposed',
+    statusLabel: '提案中',
+    category: 'landscape',
+    categoryLabel: '景观',
+    gallery: [
+      '/images/projects/contentshow/01.jpg',
+      '/images/projects/contentshow/02.jpg',
+    ],
+    description: '黄浦江沿岸生态廊道规划项目，以生态修复和公众可达性为核心目标。设计构建连续的步行系统和多层次生境系统，提升城市滨水空间品质。',
   },
 ];

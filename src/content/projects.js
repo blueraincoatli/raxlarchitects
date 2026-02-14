@@ -67,14 +67,14 @@ export const projects = [
   },
   {
     id: '10-content-office-shop',
-    name: '城市客厅',
+    name: 'content目录办公室',
     location: '上海 · 中国',
     statusLabel: '已完成',
     categoryLabel: '室内',
   },
   {
     id: '11-contentshow',
-    name: '滨江绿色廊道',
+    name: 'content目录发布会',
     location: '上海 · 中国',
     statusLabel: '提案中',
     categoryLabel: '景观',

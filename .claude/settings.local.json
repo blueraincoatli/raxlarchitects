@@ -72,7 +72,23 @@
       "Bash(do if [ -f \"03-upper-east.$ext\" ])",
       "Bash(then mv \"03-upper-east.$ext\" \"shanghai-pudi.$ext\")",
       "Bash(fi:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(find:*)",
+      "Bash(bash:*)",
+      "Bash(echo:*)",
+      "Bash(do:*)",
+      "Bash(then avif=\"$i.avif\")",
+      "Bash(webp=\"$i.webp\")",
+      "Bash(if:*)",
+      "Bash(then echo \"Missing AVIF: $i.jpg\")",
+      "Bash(then echo \"Missing WebP: $i.jpg\")",
+      "Bash(xargs:*)",
+      "Bash(then echo \"=== $dir ===\")",
+      "Bash(then identify -format \"%w x %h - %f\\\\n\" \"$f\")",
+      "Bash(break:*)",
+      "Bash(pip install:*)",
+      "Bash(magick identify:*)",
+      "Bash(ffprobe:*)"
     ]
   }
 }

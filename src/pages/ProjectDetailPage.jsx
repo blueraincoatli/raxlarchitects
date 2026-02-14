@@ -21,7 +21,7 @@ export function ProjectDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Link to="/projects" className="fixed top-4 left-4 z-50 text-white hover:opacity-70 transition-opacity-300 flex items-center gap-2">
+      <Link to="/projects" className="fixed top-20 left-4 z-50 text-white hover:opacity-70 transition-opacity-300 flex items-center gap-2">
         <span className="text-xl">&larr;</span>
         <span>Back to Projects</span>
       </Link>

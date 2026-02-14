@@ -26,7 +26,7 @@ function AllProjectsPage() {
             className="break-inside-avoid block group mb-6"
           >
             {/* 项目卡片 - 相对定位容器 */}
-            <div className="relative overflow-hidden rounded-lg transition-transform hover:scale-[1.02]">
+            <div className="relative overflow-hidden transition-transform hover:scale-[1.02]">
               {/* 图片 - 自然比例 */}
               <img
                 src={`/images/projects/${project.id}.jpg`}

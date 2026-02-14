@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { projects } from '../content/projects';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PictureImage from '../components/PictureImage';
 
 export function ProjectDetailPage() {
@@ -10,15 +10,81 @@ export function ProjectDetailPage() {
   if (!project) return <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-white">Project not found</div>;
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isImageTransitioning, setIsImageTransitioning] = useState(false);
+  const transitionTimersRef = useRef([]);
   const images = project.gallery || [];
+  const FADE_OUT_MS = 180;
+  const FADE_TOTAL_MS = 420;
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [id]);
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
+  const clearTransitionTimers = useCallback(() => {
+    transitionTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
+    transitionTimersRef.current = [];
+  }, []);
+
+  const changeImageWithTransition = useCallback((direction) => {
+    if (images.length <= 1 || isImageTransitioning) return;
+
+    clearTransitionTimers();
+    setIsImageTransitioning(true);
+
+    const switchTimer = window.setTimeout(() => {
+      setCurrentImageIndex((prev) =>
+        direction === 'next'
+          ? (prev + 1) % images.length
+          : (prev - 1 + images.length) % images.length
+      );
+    }, FADE_OUT_MS);
+
+    const finishTimer = window.setTimeout(() => {
+      setIsImageTransitioning(false);
+    }, FADE_TOTAL_MS);
+
+    transitionTimersRef.current.push(switchTimer, finishTimer);
+  }, [FADE_OUT_MS, FADE_TOTAL_MS, clearTransitionTimers, images.length, isImageTransitioning]);
+
+  const nextImage = useCallback(() => {
+    changeImageWithTransition('next');
+  }, [changeImageWithTransition]);
+
+  const prevImage = useCallback(() => {
+    changeImageWithTransition('prev');
+  }, [changeImageWithTransition]);
+
+  useEffect(() => {
+    return () => {
+      clearTransitionTimers();
+    };
+  }, [clearTransitionTimers]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+
+    const onKeyDown = (event) => {
+      const target = event.target;
+      const tagName = target?.tagName;
+      const isEditable =
+        tagName === 'INPUT' ||
+        tagName === 'TEXTAREA' ||
+        target?.isContentEditable;
+
+      if (isEditable) return;
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        nextImage();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prevImage();
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [images.length, nextImage, prevImage]);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
@@ -27,7 +93,9 @@ export function ProjectDetailPage() {
         <PictureImage
           imagePath={images[currentImageIndex]}
           alt={`${project.name} - Image ${currentImageIndex + 1}`}
-          className="block h-screen w-auto max-w-none mx-auto object-contain"
+          className={`block h-screen w-auto max-w-none mx-auto object-contain transition-all duration-[420ms] ease-out will-change-transform ${
+            isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
+          }`}
         />
 
         {/* 项目名称和地点在图片左下角 */}
@@ -59,11 +127,7 @@ export function ProjectDetailPage() {
       {/* 文字介绍区域 - 需要向下滚动查看 */}
       <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-8 py-12">
-          {/* 项目名称和地点显示在图片左下角，这里不重复 */}
-          <h1 className="text-3xl md:text-4xl font-normal tracking-wider text-white mb-8">{project.name}</h1>
-
           <div className="space-y-4 text-white">
-            <p className="text-lg">{project.location}</p>
             <p><span className="text-white/70">Client:</span> {project.client}</p>
             {project.year && <p><span className="text-white/70">Year:</span> {project.year}</p>}
             {project.grossFloorArea && <p><span className="text-white/70">Area:</span> {project.grossFloorArea}</p>}

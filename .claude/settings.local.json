@@ -68,7 +68,10 @@
       "Bash(ffmpeg:*)",
       "Bash(for:*)",
       "Bash(do basename:*)",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(do if [ -f \"03-upper-east.$ext\" ])",
+      "Bash(then mv \"03-upper-east.$ext\" \"shanghai-pudi.$ext\")",
+      "Bash(fi:*)"
     ]
   }
 }

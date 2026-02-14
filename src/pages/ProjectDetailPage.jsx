@@ -83,7 +83,7 @@ export function ProjectDetailPage() {
 
           {project.description && (
             <div className="mt-8 pt-8 border-t border-white/10">
-              <p className="text-white/80 leading-relaxed">{project.description}</p>
+              <p className="text-white/80 leading-relaxed" style={{lineHeight: '1.8'}}>{project.description}</p>
             </div>
           )}
         </div>

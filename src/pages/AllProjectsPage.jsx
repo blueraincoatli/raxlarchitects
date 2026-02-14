@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { projects } from '../content/projects';
+import PictureImage from '../components/PictureImage';
 
 function AllProjectsPage() {
   // 分割项目为左右两列，交替摆放
@@ -21,8 +22,8 @@ function AllProjectsPage() {
               className="break-inside-avoid block group"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={project.imagePath}
+                <PictureImage
+                  imagePath={project.imagePath}
                   alt={project.name}
                   className="w-full h-auto object-cover transition-transform duration-500 hover:scale-110"
                 />
@@ -55,8 +56,8 @@ function AllProjectsPage() {
               className="break-inside-avoid block group"
             >
               <div className="relative overflow-hidden">
-                <img
-                  src={project.imagePath}
+                <PictureImage
+                  imagePath={project.imagePath}
                   alt={project.name}
                   className="w-full h-auto object-cover transition-transform duration-500 hover:scale-110"
                 />

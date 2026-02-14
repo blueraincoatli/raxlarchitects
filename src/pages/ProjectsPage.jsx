@@ -1,13 +1,14 @@
 import { projects } from '../content/projects';
 import { Link } from 'react-router-dom';
+import PictureImage from '../components/PictureImage';
 
 // 项目卡片组件
 function ProjectCard({ project, className = '', aspectRatio = 'aspect-[16/9]' }) {
   return (
     <div className={`relative group cursor-pointer overflow-hidden ${className}`}>
       <div className={`relative w-full ${aspectRatio}`}>
-        <img
-          src={project.imagePath}
+        <PictureImage
+          imagePath={project.imagePath}
           alt={project.name}
           className="w-full h-full object-cover"
         />

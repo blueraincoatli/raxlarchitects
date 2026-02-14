@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useState } from 'react';
+import PictureImage from '../components/PictureImage';
 
 export function ProjectDetailPage() {
   const { id } = useParams();
@@ -29,8 +30,8 @@ export function ProjectDetailPage() {
       <div className="pt-16 pb-8 px-4">
         <div className="relative max-w-6xl mx-auto mb-8">
           <div className="relative bg-black/20 rounded-2xl overflow-hidden">
-            <img
-              src={images[currentImageIndex]}
+            <PictureImage
+              imagePath={images[currentImageIndex]}
               alt={`${project.name} - Image ${currentImageIndex + 1}`}
               className="w-full h-auto max-h-[70vh] object-contain"
             />

@@ -73,7 +73,7 @@ export const projects = [
     categoryLabel: '室内',
   },
   {
-    id: '11-contentshow',
+    id: '11-content show',
     name: 'content目录发布会',
     location: '上海 · 中国',
     statusLabel: '提案中',

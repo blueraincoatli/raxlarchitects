@@ -3,8 +3,8 @@ import { projects } from '../content/projects';
 
 function AllProjectsPage() {
   // 分割项目为左右两列
-  const leftColumn = projects.filter((_, index) => [0, 2, 4, 6, 8, 10].includes(index));
-  const rightColumn = projects.filter((_, index) => [1, 3, 5, 7, 9, 11].includes(index));
+  const leftColumn = projects.filter((_, index) => [0, 2, 4, 6, 8, 10].includes(index)); // 1,3,5,7,9,11
+  const rightColumn = projects.filter((_, index) => [1, 3, 5, 7, 9, 11].includes(index)); // 2,4,6,8, 10
 
   return (
     <div className="pt-32 pb-16 px-6 lg:px-10">
@@ -23,6 +23,8 @@ function AllProjectsPage() {
                 alt={project.name}
                 className="w-full h-auto object-cover transition-transform duration-500 hover:scale-110"
               />
+
+              {/* 文字叠加 - 左下角 */}
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                 <h3 className="text-lg font-light text-white mb-1 drop-shadow-lg">
                   {project.name}
@@ -53,6 +55,8 @@ function AllProjectsPage() {
                 alt={project.name}
                 className="w-full h-auto object-cover transition-transform duration-500 hover:scale-110"
               />
+
+              {/* 文字叠加 - 左下角 */}
               <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                 <h3 className="text-lg font-light text-white mb-1 drop-shadow-lg">
                   {project.name}

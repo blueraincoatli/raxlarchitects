@@ -71,7 +71,8 @@
       "Bash(done)",
       "Bash(do if [ -f \"03-upper-east.$ext\" ])",
       "Bash(then mv \"03-upper-east.$ext\" \"shanghai-pudi.$ext\")",
-      "Bash(fi:*)"
+      "Bash(fi:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

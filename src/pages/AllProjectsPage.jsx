@@ -11,9 +11,9 @@ function AllProjectsPage() {
   return (
     <div className="pt-32 pb-16 px-6 lg:px-10">
       {/* 瀑布流布局 - 两列独立容器 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* 左列 - 奇数位置 */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
           {leftColumn.map(project => (
             <Link
               key={project.id}
@@ -47,7 +47,7 @@ function AllProjectsPage() {
         </div>
 
         {/* 右列 - 偶数位置 */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
           {rightColumn.map(project => (
             <Link
               key={project.id}

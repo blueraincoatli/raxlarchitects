@@ -3,6 +3,7 @@
 
 # Dependencies
 node_modules/
+dist/
 
 # Beautify files - 已提交到仓库用于在线编辑
 # (如需忽略可取消注释下面两行)

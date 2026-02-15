@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PictureImage from '../components/PictureImage';
-import { getCategoryLabel, getProjectClient, getProjectDescription, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
+import { formatDetailLabel, getCategoryLabel, getProjectDetailEntries, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
 export function ProjectDetailPage() {
   const { lang, t } = useLanguage();
@@ -15,6 +15,7 @@ export function ProjectDetailPage() {
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const transitionTimersRef = useRef([]);
   const images = project.gallery || [];
+  const detailEntries = getProjectDetailEntries(project, lang);
   const FADE_OUT_MS = 180;
   const FADE_TOTAL_MS = 420;
 
@@ -129,30 +130,31 @@ export function ProjectDetailPage() {
       {/* 文字介绍区域 - 需要向下滚动查看 */}
       <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-8 py-12">
-          <div className="space-y-4 text-white">
-            <p><span className="text-white/70">{t('detail.client')}:</span> {getProjectClient(project, lang)}</p>
-            {project.year && <p><span className="text-white/70">{t('detail.year')}:</span> {project.year}</p>}
-            {project.grossFloorArea && <p><span className="text-white/70">{t('detail.area')}:</span> {project.grossFloorArea}</p>}
-            {project.status && (
-              <p>
-                <span className="text-white/70">{t('detail.status')}:</span>{' '}
-                <span className={`inline-block px-2 py-0.5 rounded text-xs ${
-                  project.status === 'finalized' ? 'bg-green-500/30 text-green-300' :
-                  project.status === 'under-construction' ? 'bg-yellow-500/30 text-yellow-300' :
-                  'bg-gray-500/30 text-gray-300'
-                }`}>
-                  {getStatusLabel(project.status, lang)}
-                </span>
+          <div className="space-y-3 text-white/85 leading-relaxed">
+            {detailEntries.map((entry, index) => (
+              <p key={`${project.id}-detail-${index}`}>
+                {entry.label ? (
+                  <>
+                    <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(entry.label, lang)}</span>
+                    <span className="text-white/75"> {' : '} </span>
+                    <span>{entry.value}</span>
+                  </>
+                ) : (
+                  entry.text
+                )}
               </p>
-            )}
-            {project.category && <p><span className="text-white/70">{t('detail.category')}:</span> {getCategoryLabel(project.category, lang)}</p>}
+            ))}
+            <p className="pt-2 border-t border-white/10">
+              <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(t('detail.status'), lang)}</span>
+              <span className="text-white/75"> {' : '} </span>
+              <span className="text-white/85">{getStatusLabel(project.status, lang)}</span>
+            </p>
+            <p>
+              <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(t('detail.category'), lang)}</span>
+              <span className="text-white/75"> {' : '} </span>
+              <span className="text-white/85">{getCategoryLabel(project.category, lang)}</span>
+            </p>
           </div>
-
-          {getProjectDescription(project, lang) && (
-            <div className="mt-8 pt-8 border-t border-white/10">
-              <p className="text-white/80 leading-relaxed">{getProjectDescription(project, lang)}</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

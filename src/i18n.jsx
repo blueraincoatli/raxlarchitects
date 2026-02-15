@@ -127,8 +127,8 @@ const projectClientMap = {
 
 const projectDescriptionMap = {
   'one-park-gubei': {
-    zh: '项目名称：上海古北壹号（ONE PARK GUBEI）。业主：福来国际（上海）有限公司。建筑设计：上海锐点建筑设计有限公司。建筑施工图设计：上海天华建筑设计有限公司。室内设计：维迩森室内建筑设计（上海）有限公司、梁志天设计咨询（深圳）有限公司、美高建设（中国）有限公司。景观设计：贝尔高林国际（新加坡）私人有限公司、上海锐点建筑设计有限公司。设计时间：2009年。建成时间：2015年。建筑面积：147,500㎡。',
-    en: 'Project: Shanghai ONE PARK GUBEI. Client: WEALINE INTERNATIONAL (SHANGHAI) CO., LTD. Architectural Design: RA ARCHITECTS CO., LTD. Construction Drawing Design: TIANHUA Architect Planning & Engineering Ltd. Interior Design: Wilson Associates Interior Architectural Design, Steve Leung Designers, and MEGO Decoration (China) Co., Ltd. Landscape Design: Belt Collins International (Singapore) Pte Ltd and RA ARCHITECTS CO., LTD. Design Year: 2009. Completion Year: 2015. Gross Floor Area: 147,500 sqm.',
+    zh: '项目名称：上海古北壹号（ONE PARK GUBEI）。业主：福来国际（上海）有限公司。建筑设计：上海锐点建筑设计有限公司。建筑施工图设计：上海天华建筑设计有限公司。设计团队：饶青、林海新、胡继伟、乐俊平、黄先岳。室内设计：维迩森室内建筑设计（上海）有限公司、梁志天设计咨询（深圳）有限公司、美高建设（中国）有限公司。景观设计：贝尔高林国际（新加坡）私人有限公司、上海锐点建筑设计有限公司。设计时间：2009年。建成时间：2015年。建筑面积：147,500㎡。',
+    en: 'Project Name: Shanghai ONE PARK GUBEI. Client: WEALINE INTERNATIONAL (SHANGHAI) CO., LTD. Architectural Design: RA ARCHITECTS CO., LTD. Construction Drawing Design: TIANHUA Architect Planning & Engineering Ltd. Design Team: Rao Qing, Lin Haixin, Hu Jiwei, Le Junping, Huang Xianyue. Interior Design: Wilson Associates Interior Architectural Design, Steve Leung Designers, and MEGO Decoration (China) Co., Ltd. Landscape Design: Belt Collins International (Singapore) Pte Ltd and RA ARCHITECTS CO., LTD. Design Year: 2009. Completion Year: 2015. Gross Floor Area: 147,500 sqm.',
   },
   'royal-pavilion': {
     zh: '项目名称：上海华山公寓（Royal Pavilion）。业主：上海和峰源置业有限公司。建筑设计：上海锐点建筑设计有限公司。室内设计：梁志天设计咨询（深圳）有限公司。景观设计：上海锐点建筑设计有限公司。设计时间：2016年。建成时间：2018年。建筑面积：34,800㎡。',
@@ -159,16 +159,16 @@ const projectDescriptionMap = {
     en: 'Project: Lot HK231-01, North Bund Street, Hongkou District. Location: East of Zhapu Road, north of Tiantong Road, south of Wuchang Road, west of Wusong Road. Status: Under Construction. Client: Shanghai Xinhu Tianhong Urban Development Co., Ltd. Architectural Design: RA ARCHITECTS CO., LTD and GOA (Group of Architects). Construction Drawing Design: Shanghai Zhongfang Architectural Design Co., Ltd. Design Year: 2020. Expected Completion: 2025. Gross Floor Area: 56,443 sqm above ground and 55,761 sqm below ground.',
   },
   chairclub: {
-    zh: '上海法租界内的历史建筑室内改造项目，以“Chair Club”为设计主题，创造融合当代艺术与历史氛围的会员制空间。设计强调材料对话与空间叙事。',
-    en: 'An adaptive reuse interior project in the former French Concession, balancing art atmosphere and historic texture.',
+    zh: '',
+    en: '',
   },
   'content-office-shop': {
-    zh: '社区公共空间室内设计，以“城市客厅”为概念，打造居民共享的多功能空间。设计强调灵活可变性和社区参与感。',
-    en: 'An interior project for a community-oriented office and retail space conceived as an urban living room.',
+    zh: '',
+    en: '',
   },
   'content-show': {
-    zh: '黄浦江沿岸生态廊道规划项目，以生态修复和公众可达性为核心目标。设计构建连续的步行系统和多层次生境系统，提升城市滨水空间品质。',
-    en: 'A cross-disciplinary content and fashion project centered on visual experiments and cultural presentation.',
+    zh: '',
+    en: '',
   },
 };
 
@@ -250,6 +250,52 @@ export function getProjectClient(project, lang) {
 
 export function getProjectDescription(project, lang) {
   const mapped = projectDescriptionMap[project.id];
-  if (lang === 'zh') return mapped?.zh || project.description;
-  return mapped?.en || project.description;
+  if (mapped && Object.prototype.hasOwnProperty.call(mapped, lang)) {
+    return mapped[lang];
+  }
+  return project.description;
+}
+
+export function getProjectDetailEntries(project, lang) {
+  const raw = (getProjectDescription(project, lang) || '').trim();
+  if (!raw) return [];
+
+  const splitBySentence = (text) => {
+    if (lang === 'zh') {
+      return text
+        .split('。')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => `${line}。`);
+    }
+
+    return text
+      .split('. ')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => (line.endsWith('.') ? line : `${line}.`));
+  };
+
+  const lines = splitBySentence(raw);
+  return lines.map((line) => {
+    const cleaned = line.endsWith('。') || line.endsWith('.')
+      ? line.slice(0, -1).trim()
+      : line.trim();
+    const match = cleaned.match(/^([^:：]+)\s*[:：]\s*(.+)$/);
+    if (!match) {
+      return { text: line };
+    }
+    return {
+      label: match[1].trim(),
+      value: match[2].trim(),
+    };
+  });
+}
+
+export function formatDetailLabel(label, lang) {
+  if (!label) return '';
+  if (lang === 'zh') {
+    return label;
+  }
+  return label.toUpperCase();
 }

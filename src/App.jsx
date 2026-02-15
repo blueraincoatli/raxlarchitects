@@ -10,7 +10,7 @@ import ContactPage from './pages/ContactPage';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#0a0a0a] relative">
+      <div className="min-h-screen bg-[#181818] relative">
         <Navigation />
         <main>
           <Routes>

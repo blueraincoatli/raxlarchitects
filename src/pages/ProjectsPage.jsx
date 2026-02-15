@@ -248,7 +248,7 @@ export function ProjectsPage() {
   const architectureLevels = category === 'architecture' ? classifyArchitectureCards(cards) : null;
 
   return (
-    <div className="min-h-screen pt-16 bg-[#0a0a0a]">
+    <div className="min-h-screen pt-16 bg-[#181818]">
       <div className="w-full mx-auto px-3 py-8">
         {cards.length === 0 && (
           <div className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4">
@@ -452,3 +452,4 @@ export function ProjectsPage() {
 }
 
 export default ProjectsPage;
+

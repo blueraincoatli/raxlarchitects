@@ -44,7 +44,7 @@ export function ProposedProjectsPage() {
   const row1Project = proposedProjects.find(p => p.id === 'macalline-anji');
 
   return (
-    <div className="min-h-screen pt-16 bg-[#0a0a0a]">
+    <div className="min-h-screen pt-16 bg-[#181818]">
       <div className="w-full mx-auto px-3 py-8">
         {/* 第1行: 全宽大图 */}
         {row1Project && (
@@ -58,3 +58,4 @@ export function ProposedProjectsPage() {
 }
 
 export default ProposedProjectsPage;
+

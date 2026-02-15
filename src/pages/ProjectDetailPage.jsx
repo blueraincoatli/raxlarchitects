@@ -7,7 +7,7 @@ export function ProjectDetailPage() {
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
 
-  if (!project) return <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center text-white">Project not found</div>;
+  if (!project) return <div className="min-h-screen bg-[#181818] flex items-center justify-center text-white">Project not found</div>;
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
@@ -87,7 +87,7 @@ export function ProjectDetailPage() {
   }, [images.length, nextImage, prevImage]);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
       <div className="relative h-screen w-full bg-black overflow-hidden">
         <PictureImage
@@ -158,3 +158,4 @@ export function ProjectDetailPage() {
 }
 
 export default ProjectDetailPage;
+

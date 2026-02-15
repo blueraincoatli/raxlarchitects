@@ -25,7 +25,7 @@ export function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen pt-16 bg-[#0a0a0a]">
+    <div className="min-h-screen pt-16 bg-[#181818]">
       <div className="max-w-6xl mx-auto px-6 py-8">
         <h1 className="text-4xl font-normal tracking-wider text-white mb-8">联系我们</h1>
 
@@ -187,3 +187,4 @@ export function ContactPage() {
 }
 
 export default ContactPage;
+

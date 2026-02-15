@@ -48,7 +48,7 @@ export function UnderConstructionPage() {
   const row2Right = underConstructionProjects.find(p => p.id === 'lot-hk231');
 
   return (
-    <div className="min-h-screen pt-16 bg-[#0a0a0a]">
+    <div className="min-h-screen pt-16 bg-[#181818]">
       <div className="w-full mx-auto px-3 py-8">
         {/* 第1行: 全宽大图 */}
         {row1Project && (
@@ -76,3 +76,4 @@ export function UnderConstructionPage() {
 }
 
 export default UnderConstructionPage;
+

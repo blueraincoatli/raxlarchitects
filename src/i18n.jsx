@@ -112,14 +112,14 @@ const projectNameMap = {
 };
 
 const projectClientMap = {
-  'one-park-gubei': { en: 'Vanke Group' },
-  'royal-pavilion': { en: 'China Resources Land' },
-  'upper-east': { en: 'Private Client' },
-  rongxinarc: { en: 'Sunac China' },
+  'one-park-gubei': { en: 'WEALINE INTERNATIONAL (SHANGHAI) CO., LTD' },
+  'royal-pavilion': { en: 'HEFENGYUAN (SHANGHAI) CO., LTD' },
+  'upper-east': { en: 'ZHONGWAN (SHANGHAI) CO., LTD' },
+  rongxinarc: { en: 'Hangzhou Rongyu Real Estate Development Co., Ltd.' },
   'macalline-anji': { en: 'Red Star Macalline' },
-  'prime-dynapolis': { en: 'Vanke Group' },
-  'moment-to-cloud': { en: 'Kaihua Municipal Government' },
-  'lot-hk231': { en: 'Xinhu Zhongbao' },
+  'prime-dynapolis': { en: 'Shanghai Mingjie Real Estate Co., Ltd.' },
+  'moment-to-cloud': { en: 'Shanghai Beicai New Town Development Co., Ltd.' },
+  'lot-hk231': { en: 'Shanghai Xinhu Tianhong Urban Development Co., Ltd.' },
   chairclub: { en: 'Private Client' },
   'content-office-shop': { en: 'Vanke Group' },
   'content-show': { en: 'Shanghai Landscaping Administration' },
@@ -127,36 +127,47 @@ const projectClientMap = {
 
 const projectDescriptionMap = {
   'one-park-gubei': {
-    en: 'An urban renewal project in Gubei that blends tradition and contemporary living through innovative spatial organization.',
+    zh: '项目名称：上海古北壹号（ONE PARK GUBEI）。业主：福来国际（上海）有限公司。建筑设计：上海锐点建筑设计有限公司。建筑施工图设计：上海天华建筑设计有限公司。室内设计：维迩森室内建筑设计（上海）有限公司、梁志天设计咨询（深圳）有限公司、美高建设（中国）有限公司。景观设计：贝尔高林国际（新加坡）私人有限公司、上海锐点建筑设计有限公司。设计时间：2009年。建成时间：2015年。建筑面积：147,500㎡。',
+    en: 'Project: Shanghai ONE PARK GUBEI. Client: WEALINE INTERNATIONAL (SHANGHAI) CO., LTD. Architectural Design: RA ARCHITECTS CO., LTD. Construction Drawing Design: TIANHUA Architect Planning & Engineering Ltd. Interior Design: Wilson Associates Interior Architectural Design, Steve Leung Designers, and MEGO Decoration (China) Co., Ltd. Landscape Design: Belt Collins International (Singapore) Pte Ltd and RA ARCHITECTS CO., LTD. Design Year: 2009. Completion Year: 2015. Gross Floor Area: 147,500 sqm.',
   },
   'royal-pavilion': {
-    en: 'A high-end apartment project in central Shanghai focused on functional planning, comfort and material quality.',
+    zh: '项目名称：上海华山公寓（Royal Pavilion）。业主：上海和峰源置业有限公司。建筑设计：上海锐点建筑设计有限公司。室内设计：梁志天设计咨询（深圳）有限公司。景观设计：上海锐点建筑设计有限公司。设计时间：2016年。建成时间：2018年。建筑面积：34,800㎡。',
+    en: 'Project: Shanghai Royal Pavilion. Client: HEFENGYUAN (SHANGHAI) CO., LTD. Architectural Design: RA ARCHITECTS CO., LTD. Interior Design: Steve Leung Designers. Landscape Design: RA ARCHITECTS CO., LTD. Design Year: 2016. Completion Year: 2018. Gross Floor Area: 34,800 sqm.',
   },
   'upper-east': {
-    en: 'A premium residential project in Pudong integrating modern urban life with landscape-oriented living.',
+    zh: '项目名称：上海尚东国际名园&尚东鼎（UPPER EAST）。业主：中万置业（上海）有限公司。建筑设计：上海锐点建筑设计有限公司。室内设计：美高建设（中国）有限公司。景观设计：上海锐点建筑设计有限公司。设计时间：2004-2008年。建成时间：2010年。建筑面积：300,000㎡。',
+    en: 'Project: Shanghai UPPER EAST. Client: ZHONGWAN (SHANGHAI) CO., LTD. Architectural Design: RA ARCHITECTS CO., LTD. Interior Design: MEGO Decoration (China) Co., Ltd. Landscape Design: RA ARCHITECTS CO., LTD. Design Period: 2004-2008. Completion Year: 2010. Gross Floor Area: 300,000 sqm.',
   },
   rongxinarc: {
-    en: 'An innovation-oriented complex built around an integrated ecosystem for work, life and learning.',
+    zh: '项目名称：杭州·融信公馆ARC。位置：杭州市拱墅区学院北路与隐秀路交汇处。项目状态：已建成。项目业主：杭州融誉房地产开发有限公司。建筑设计：上海锐点建筑设计有限公司。设计时间：2016-2017。建成时间：2020年。建筑面积：119,719㎡。奖项荣誉：2018年金盘奖“总评选最佳住宅”“浙江赛区年度最佳住宅奖”。',
+    en: 'Project: Hangzhou Rongxin Mansion ARC. Location: Intersection of Xueyuan North Road and Yinxiu Road, Gongshu District, Hangzhou. Status: Finalized. Client: Hangzhou Rongyu Real Estate Development Co., Ltd. Architectural Design: RA ARCHITECTS CO., LTD. Design Period: 2016-2017. Completion Year: 2020. Gross Floor Area: 119,719 sqm. Awards: 2018 Golden Platter Awards - Best Residential Project (Overall) and Best Residential Project of Zhejiang Region.',
   },
   'macalline-anji': {
-    en: 'A resort villa concept in Anji inspired by the bamboo forest context and low-impact architectural strategies.',
+    zh: '项目信息：红星美凯龙安吉度假别墅。位置：浙江省安吉县。项目状态：提案。建筑设计：上海锐点建筑设计有限公司。设计时间：2017年。',
+    en: 'Project: Red Star Macalline Anji Resort Villa. Location: Anji County, Zhejiang Province. Status: Proposed. Architectural Design: RA ARCHITECTS CO., LTD. Design Year: 2017.',
   },
   'prime-dynapolis': {
-    en: 'Phase III extension of Prime Dynapolis, continuing the urban renewal approach with renewed community vitality.',
+    zh: '项目名称：品尊国际（三期）（Prime Dynapolis）。位置：上海市普陀区府村路268号。项目状态：建设中。项目业主：上海明捷置业有限公司。建筑设计：上海锐点建筑设计有限公司。建筑施工图设计：上海民用建筑设计院。室内设计：梁志天设计咨询有限公司。景观设计：SCDA Architects。设计时间：2020年。建成时间：2024年。建筑面积：地上136,399㎡，地下62,193㎡。',
+    en: 'Project: Prime Dynapolis (Phase III). Location: No. 268 Fucun Road, Putuo District, Shanghai. Status: Under Construction. Client: Shanghai Mingjie Real Estate Co., Ltd. Architectural Design: RA ARCHITECTS CO., LTD. Construction Drawing Design: Shanghai Civil Architectural Design Institute. Interior Design: Steve Leung Designers. Landscape Design: SCDA Architects. Design Year: 2020. Expected Completion: 2024. Gross Floor Area: 136,399 sqm above ground and 62,193 sqm below ground.',
   },
   'moment-to-cloud': {
-    en: 'A regeneration proposal in old Kaihua, reinterpreting local urban heritage with contemporary functions.',
+    zh: '项目名称：开云·艾尚里（Moment To Cloud）。位置：浦三路东、新浦路北、川杨河南。项目状态：建设中。项目业主：上海北蔡新城镇开发有限公司。建筑设计：上海锐点建筑设计有限公司。建筑施工图设计：上海筑景建筑设计有限公司。室内设计：上海锐点建筑设计有限公司。景观设计：上海锐点建筑设计有限公司。设计时间：2019年起。建成时间：2024年。建筑面积：地上180,953㎡，地下138,151㎡。',
+    en: 'Project: Moment To Cloud. Location: East of Pusan Road, north of Xinpu Road, south of Chuanyang River. Status: Under Construction. Client: Shanghai Beicai New Town Development Co., Ltd. Architectural Design: RA ARCHITECTS CO., LTD. Construction Drawing Design: Shanghai Zhujing Architectural Design Co., Ltd. Interior Design: RA ARCHITECTS CO., LTD. Landscape Design: RA ARCHITECTS CO., LTD. Design Start: 2019. Expected Completion: 2024. Gross Floor Area: 180,953 sqm above ground and 138,151 sqm below ground.',
   },
   'lot-hk231': {
-    en: 'A waterfront residential development in Jiaxing inspired by the spatial rhythm of Rainbow Bridge.',
+    zh: '项目名称：北外滩32街坊（Lot HK231-01，North Bund Street，Hongkou District）。位置：乍浦路东、天潼路北、武昌路南、吴淞路西。项目状态：建设中。项目业主：上海新湖天虹城市开发有限公司。建筑设计：上海锐点建筑设计有限公司、大象建筑（GOA）设计有限公司。建筑施工图设计：上海中房建筑设计有限公司。设计时间：2020年。建成时间：2025年。建筑面积：地上56,443㎡，地下55,761㎡。',
+    en: 'Project: Lot HK231-01, North Bund Street, Hongkou District. Location: East of Zhapu Road, north of Tiantong Road, south of Wuchang Road, west of Wusong Road. Status: Under Construction. Client: Shanghai Xinhu Tianhong Urban Development Co., Ltd. Architectural Design: RA ARCHITECTS CO., LTD and GOA (Group of Architects). Construction Drawing Design: Shanghai Zhongfang Architectural Design Co., Ltd. Design Year: 2020. Expected Completion: 2025. Gross Floor Area: 56,443 sqm above ground and 55,761 sqm below ground.',
   },
   chairclub: {
+    zh: '上海法租界内的历史建筑室内改造项目，以“Chair Club”为设计主题，创造融合当代艺术与历史氛围的会员制空间。设计强调材料对话与空间叙事。',
     en: 'An adaptive reuse interior project in the former French Concession, balancing art atmosphere and historic texture.',
   },
   'content-office-shop': {
+    zh: '社区公共空间室内设计，以“城市客厅”为概念，打造居民共享的多功能空间。设计强调灵活可变性和社区参与感。',
     en: 'An interior project for a community-oriented office and retail space conceived as an urban living room.',
   },
   'content-show': {
+    zh: '黄浦江沿岸生态廊道规划项目，以生态修复和公众可达性为核心目标。设计构建连续的步行系统和多层次生境系统，提升城市滨水空间品质。',
     en: 'A cross-disciplinary content and fashion project centered on visual experiments and cultural presentation.',
   },
 };
@@ -238,6 +249,7 @@ export function getProjectClient(project, lang) {
 }
 
 export function getProjectDescription(project, lang) {
-  if (lang === 'zh') return project.description;
-  return projectDescriptionMap[project.id]?.en || project.description;
+  const mapped = projectDescriptionMap[project.id];
+  if (lang === 'zh') return mapped?.zh || project.description;
+  return mapped?.en || project.description;
 }

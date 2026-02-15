@@ -5,6 +5,7 @@ import AllProjectsPage from './pages/AllProjectsPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
 import AboutPage from './pages/AboutPage';
+import PartnerDetailPage from './pages/PartnerDetailPage';
 import ContactPage from './pages/ContactPage';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/proposed" element={<Navigate to="/projects?status=proposed" replace />} />
             <Route path="/projects/:id" element={<ProjectDetailPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/about/partners/:id" element={<PartnerDetailPage />} />
             <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </main>

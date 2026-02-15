@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import PictureImage from '../components/PictureImage';
 
 const ABOUT_HERO_IMAGE = '/images/projects/royal-pavilion/05-royal-pavilion';
@@ -14,8 +14,8 @@ const aboutParagraphs = [
 ];
 
 const leadPartners = [
-  { name: 'RAO QING', imagePath: '/images/about/partner1' },
-  { name: 'LIAO XIAOLING', imagePath: '/images/about/partner2' },
+  { id: 'rao-qing', name: 'RAO QING', imagePath: '/images/about/partner1' },
+  { id: 'liao-xiaoling', name: 'LIAO XIAOLING', imagePath: '/images/about/partner2' },
 ];
 
 const awardsFeature = {
@@ -110,12 +110,14 @@ export function AboutPage() {
             <div className="max-w-[980px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
               {leadPartners.map((partner) => (
                 <div key={partner.name}>
-                  <div className="aspect-[5/4] overflow-hidden">
-                    <PictureImage imagePath={partner.imagePath} alt={partner.name} className="w-full h-full object-cover" />
-                  </div>
-                  <h2 className="mt-4 text-center text-2xl md:text-3xl font-semibold tracking-wide text-white">
-                    {partner.name}
-                  </h2>
+                  <Link to={`/about/partners/${partner.id}`} className="block group">
+                    <div className="aspect-[5/4] overflow-hidden">
+                      <PictureImage imagePath={partner.imagePath} alt={partner.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+                    </div>
+                    <h2 className="mt-4 text-center text-2xl md:text-3xl font-semibold tracking-wide text-white">
+                      {partner.name}
+                    </h2>
+                  </Link>
                 </div>
               ))}
             </div>

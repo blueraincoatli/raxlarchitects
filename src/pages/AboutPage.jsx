@@ -2,12 +2,9 @@ import { useSearchParams } from 'react-router-dom';
 import PictureImage from '../components/PictureImage';
 
 const ABOUT_HERO_IMAGE = '/images/projects/royal-pavilion/05-royal-pavilion';
-
-const tabs = [
-  { key: 'company', label: 'About Us' },
-  { key: 'partners', label: 'Partners' },
-  { key: 'awards', label: 'Awards' },
-];
+const PARTNER_HERO_IMAGE = '/images/projects/royal-pavilion/05-royal-pavilion';
+const AWARDS_HERO_IMAGE = '/images/projects/royal-pavilion/05-royal-pavilion';
+const AWARDS_FEATURE_IMAGE = '/images/about/award';
 
 const aboutParagraphs = [
   'Shanghai RA Architecture Co., Ltd./ Shanghai Zhaodu Architecture Design Co., Ltd. is a professional design company operating as an architect office. Founded by Mr. Rao Qing and partners in 2001, it has been mainly operating in Shanghai as a creative company. The company has two departments, architecture and landscape design, with no more than 60 designers.',
@@ -16,35 +13,52 @@ const aboutParagraphs = [
   'In terms of cooperation mode, it adopts a design model that is in line with international standards, giving full play to its expertise, emphasizing division of labor and cooperation, and providing professional scheme design services and full-process control and tracking services.',
 ];
 
-const partnerData = [
-  { name: 'Vanke Group', type: 'Real Estate Developer' },
-  { name: 'Poly Developments', type: 'Real Estate Developer' },
-  { name: 'China Resources Land', type: 'Real Estate Developer' },
-  { name: 'Sunac China', type: 'Real Estate Developer' },
-  { name: 'Tongji University', type: 'Academic Partner' },
-  { name: 'Shanghai Construction Group', type: 'Engineering Partner' },
+const leadPartners = [
+  { name: 'RAO QING', imagePath: '/images/about/partner1' },
+  { name: 'LIAO XIAOLING', imagePath: '/images/about/partner2' },
 ];
 
-const awardData = [
-  { year: '2023', award: 'Shanghai Excellent Architectural Design Award', project: 'Yifangcheng Commercial Center' },
-  { year: '2022', award: 'China Architectural Design Award', project: 'Hushan Peninsula Resort Hotel' },
-  { year: '2021', award: 'WAA Architecture Award', project: 'Gubei Civic Activity Center' },
-  { year: '2020', award: 'Asia Design Grand Award', project: 'Yunhu Tech Park' },
-  { year: '2019', award: 'Shanghai Architecture Creation Award', project: 'Gubei Park Renewal' },
-];
+const awardsFeature = {
+  title: 'Shanghai ONE PARK GUBEI',
+  lines: [
+    "Awarded 'Asia's Best Property Award' in 2015.",
+    "Awarded 'Annual Best Apartment' at the 2015 Nobility Awards.",
+  ],
+  paragraphs: [
+    "The 'Asia's Best Property Award' is an authoritative real estate award in the Asia-Pacific region. Since its inception in 2005, it has been considered the “Oscar” ceremony of the Asian real estate industry. The professionalism and impartiality of the award are second to none in the Asia-Pacific region, and winning the award undoubtedly represents the highest level in the field.",
+    "In 2015, the project was also honored with the 'Best Residential Development (Shanghai) - Excellent Award,' representing the top-notch architectural design and service level of luxury homes in Asia.",
+  ],
+};
 
 export function AboutPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const rawTab = searchParams.get('tab');
   const activeTab = rawTab === 'partners' || rawTab === 'awards' ? rawTab : 'company';
 
-  const switchTab = (key) => {
-    if (key === 'company') {
-      setSearchParams({});
-      return;
-    }
-    setSearchParams({ tab: key });
-  };
+  const renderFooter = () => (
+    <footer className="bg-[#181818] border-t border-white/10">
+      <div className="max-w-[1160px] mx-auto px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-8 text-xs text-white/75">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-semibold tracking-wide text-white leading-none">RA ARCHITECTS</h2>
+          </div>
+          <div className="space-y-1 leading-6">
+            <p>1512 11th Street, Suite 203, Santa Monica, 90401</p>
+            <p>+1 (310) 393-1396</p>
+            <p>raxlla@raxlarchitects.com</p>
+          </div>
+          <div className="space-y-1 leading-6">
+            <p>Building 12, Tonglefang, No. 555 Haifang Road, Shanghai</p>
+            <p>+86-21-62473655</p>
+            <p>raxlsh@raxlarchitects.com</p>
+          </div>
+        </div>
+        <div className="mt-8 pt-5 border-t border-white/10 text-[10px] tracking-[0.16em] uppercase text-white/45">
+          RAXL (C) 2025 ALL RIGHTS RESERVED
+        </div>
+      </div>
+    </footer>
+  );
 
   if (activeTab === 'company') {
     return (
@@ -71,79 +85,88 @@ export function AboutPage() {
           </div>
         </section>
 
-        <footer className="bg-[#181818] border-t border-white/10">
-          <div className="max-w-[1160px] mx-auto px-6 lg:px-8 py-10">
-            <div className="grid grid-cols-1 md:grid-cols-[1.2fr_1fr_1fr] gap-8 text-xs text-white/75">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-semibold tracking-wide text-white leading-none">RA ARCHITECTS</h2>
-              </div>
-              <div className="space-y-1 leading-6">
-                <p>1512 11th Street, Suite 203, Santa Monica, 90401</p>
-                <p>+1 (310) 393-1396</p>
-                <p>raxlla@raxlarchitects.com</p>
-              </div>
-              <div className="space-y-1 leading-6">
-                <p>Building 12, Tonglefang, No. 555 Haifang Road, Shanghai</p>
-                <p>+86-21-62473655</p>
-                <p>raxlsh@raxlarchitects.com</p>
-              </div>
-            </div>
-            <div className="mt-8 pt-5 border-t border-white/10 text-[10px] tracking-[0.16em] uppercase text-white/45">
-              RAXL (C) 2025 ALL RIGHTS RESERVED
+        {renderFooter()}
+      </div>
+    );
+  }
+
+  if (activeTab === 'partners') {
+    return (
+      <div className="min-h-screen bg-[#181818] text-white">
+        <section className="relative">
+          <div className="w-full h-[300px] md:h-[420px] lg:h-[520px]">
+            <PictureImage imagePath={PARTNER_HERO_IMAGE} alt="RA Architects Partners" className="w-full h-full object-cover" />
+          </div>
+          <div className="absolute inset-0 bg-black/15" />
+          <div className="absolute inset-0">
+            <div className="max-w-[1160px] h-full mx-auto px-6 lg:px-8 flex items-center">
+              <h1 className="text-4xl md:text-5xl font-medium tracking-wide text-white">Partners</h1>
             </div>
           </div>
-        </footer>
+        </section>
+
+        <section className="bg-[#181818]">
+          <div className="max-w-[1160px] mx-auto px-6 lg:px-8 py-12 md:py-14">
+            <div className="max-w-[980px] grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+              {leadPartners.map((partner) => (
+                <div key={partner.name}>
+                  <div className="aspect-[5/4] overflow-hidden">
+                    <PictureImage imagePath={partner.imagePath} alt={partner.name} className="w-full h-full object-cover" />
+                  </div>
+                  <h2 className="mt-4 text-center text-2xl md:text-3xl font-semibold tracking-wide text-white">
+                    {partner.name}
+                  </h2>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {renderFooter()}
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen pt-20 pb-20 bg-[#181818] text-white">
-      <div className="max-w-6xl mx-auto px-6 lg:px-10">
-        <div className="flex gap-6 text-sm uppercase tracking-[0.18em] text-white/60 mb-10 border-b border-white/15 pb-4">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => switchTab(tab.key)}
-              className={activeTab === tab.key ? 'text-white' : 'hover:text-white/90 transition-colors'}
-            >
-              {tab.label}
-            </button>
-          ))}
+    <div className="min-h-screen bg-[#181818] text-white">
+      <section className="relative">
+        <div className="w-full h-[300px] md:h-[420px] lg:h-[520px]">
+          <PictureImage imagePath={AWARDS_HERO_IMAGE} alt="RA Architects Awards" className="w-full h-full object-cover" />
         </div>
+        <div className="absolute inset-0 bg-black/15" />
+        <div className="absolute inset-0">
+          <div className="max-w-[1160px] h-full mx-auto px-6 lg:px-8 flex items-center">
+            <h1 className="text-4xl md:text-5xl font-medium tracking-wide text-white">Awards</h1>
+          </div>
+        </div>
+      </section>
 
-        {activeTab === 'partners' && (
-          <section className="max-w-5xl">
-            <h1 className="text-4xl font-normal tracking-wide mb-8">Partners</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {partnerData.map((item, index) => (
-                <div key={index} className="border border-white/15 p-5">
-                  <h2 className="text-lg text-white mb-1">{item.name}</h2>
-                  <p className="text-white/65 text-sm">{item.type}</p>
-                </div>
-              ))}
+      <section className="bg-[#181818]">
+        <div className="max-w-[1160px] mx-auto px-6 lg:px-8 py-10 md:py-12">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1.05fr] gap-6 md:gap-8 items-start">
+            <div className="overflow-hidden">
+              <PictureImage imagePath={AWARDS_FEATURE_IMAGE} alt={awardsFeature.title} className="w-full h-full object-cover" />
             </div>
-          </section>
-        )}
+            <div className="text-white/75">
+              <h2 className="text-4xl md:text-[42px] font-semibold tracking-wide text-white mb-5">
+                {awardsFeature.title}
+              </h2>
+              <div className="space-y-2 text-[13.5px] leading-7 mb-6">
+                {awardsFeature.lines.map((line, index) => (
+                  <p key={index}>{line}</p>
+                ))}
+              </div>
+              <div className="space-y-4 text-[13.5px] leading-8">
+                {awardsFeature.paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {activeTab === 'awards' && (
-          <section className="max-w-4xl">
-            <h1 className="text-4xl font-normal tracking-wide mb-8">Awards</h1>
-            <div className="space-y-4">
-              {awardData.map((item, index) => (
-                <div key={index} className="grid grid-cols-[72px_1fr] gap-4 border-b border-white/10 pb-4">
-                  <div className="text-white/55 text-2xl leading-none pt-1">{item.year}</div>
-                  <div>
-                    <h2 className="text-white text-lg mb-1">{item.award}</h2>
-                    <p className="text-white/65 text-sm">{item.project}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-      </div>
+      {renderFooter()}
     </div>
   );
 }

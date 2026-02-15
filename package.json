@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/copy-images-to-dist.mjs",
     "preview": "vite preview",
     "serve": "npx serve dist -p 8080",
     "check": "node --check src/**/*.{js,jsx}"

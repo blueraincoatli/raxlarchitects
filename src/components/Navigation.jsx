@@ -1,50 +1,95 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import logo from '/images/logo.png';
+import { projects } from '../content/projects';
+import { getProjectLocation, getProjectName, useLanguage } from '../i18n.jsx';
 
 function Navigation({ className = "" }) {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
+  const { lang, setLang, t } = useLanguage();
 
   const navItems = [
-    { path: '/', label: 'HOME' },
+    { path: '/', label: t('nav.home') },
     {
       path: '/projects',
       linkPath: '/all-projects',
-      label: 'PROJECTS',
+      label: t('nav.projects'),
       hasSubmenu: true,
       submenu: [
-        {group: 'STATUS', items: [
-          { label: 'FINALIZED PROJECT', path: '/projects?status=finalized' },
-          { label: 'UNDER CONSTRUCTION', path: '/projects?status=under-construction' },
-          { label: 'PROPOSED PROJECT', path: '/projects?status=proposed' },
+        {group: t('nav.statusGroup'), items: [
+          { label: t('nav.finalized'), path: '/projects?status=finalized' },
+          { label: t('nav.underConstruction'), path: '/projects?status=under-construction' },
+          { label: t('nav.proposed'), path: '/projects?status=proposed' },
         ]},
-        { group: 'CATEGORY', items: [
-          { label: 'ARCHITECTURE', path: '/projects?category=architecture' },
-          { label: 'INTERIOR', path: '/projects?category=interior' },
-          { label: 'LANDSCAPE', path: '/projects?category=landscape' },
+        { group: t('nav.categoryGroup'), items: [
+          { label: t('nav.architecture'), path: '/projects?category=architecture' },
+          { label: t('nav.interior'), path: '/projects?category=interior' },
+          { label: t('nav.landscape'), path: '/projects?category=landscape' },
         ]},
       ]
     },
     {
       path: '/about',
-      label: 'ABOUT',
+      label: t('nav.about'),
       hasSubmenu: true,
       submenu: [
-        { label: 'ABOUT US', path: '/about' },
-        { label: 'PARTNERS', path: '/about?tab=partners' },
-        { label: 'AWARDS', path: '/about?tab=awards' },
+        { label: t('nav.aboutUs'), path: '/about' },
+        { label: t('nav.partners'), path: '/about?tab=partners' },
+        { label: t('nav.awards'), path: '/about?tab=awards' },
       ]
     },
-    { path: '/contact', label: 'CONTACT' },
+    { path: '/contact', label: t('nav.contact') },
   ];
 
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const searchResults = useMemo(() => {
+    const source = normalizedSearchTerm
+      ? projects.filter((project) => {
+          const haystack = [
+            project.id,
+            project.name,
+            getProjectName(project, 'en'),
+            project.location,
+            getProjectLocation(project, 'en'),
+          ].join(' ').toLowerCase();
+          return haystack.includes(normalizedSearchTerm);
+        })
+      : projects;
+
+    return source.slice(0, 12);
+  }, [normalizedSearchTerm]);
+
+  useEffect(() => {
+    if (!isSearchOpen) return undefined;
+
+    const timerId = window.setTimeout(() => {
+      searchInputRef.current?.focus();
+    }, 0);
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsSearchOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.clearTimeout(timerId);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [isSearchOpen]);
+
   return (
-    <nav className={`absolute top-0 left-0 right-0 z-50 px-6 lg:px-10 py-4 flex items-center justify-between transition-colors duration-300 hover:bg-black/30 ${className}`}>
-      <Link to="/" className="flex items-center gap-2">
-        <img src={logo} alt="RA Architects" className="h-8 w-auto" />
-      </Link>
-      <div className="flex gap-6">
+    <>
+      <nav className={`absolute top-0 left-0 right-0 z-50 px-6 lg:px-10 py-4 flex items-center justify-between transition-colors duration-300 hover:bg-black/30 ${className}`}>
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logo} alt="RA Architects" className="h-8 w-auto" />
+        </Link>
+        <div className="flex items-center gap-6">
         {navItems.map(item => (
           item.hasSubmenu ? (
             <div
@@ -127,9 +172,84 @@ function Navigation({ className = "" }) {
             </Link>
           )
         ))}
-      </div>
-    </nav>
+        <button
+          type="button"
+          onClick={() => setIsSearchOpen(true)}
+          className="text-lg tracking-wider text-white/70 hover:text-white transition-opacity-300"
+        >
+          {t('nav.search')}
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang(lang === 'en' ? 'zh' : 'en')}
+          className="text-lg tracking-wider text-white/70 hover:text-white transition-opacity-300"
+        >
+          {t('nav.langToggle')}
+        </button>
+        </div>
+      </nav>
+
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[70] bg-black/75 backdrop-blur-sm px-4 py-24 md:py-28" onClick={() => setIsSearchOpen(false)}>
+          <div
+            className="max-w-4xl mx-auto bg-[#181818] border border-white/15 rounded-lg overflow-hidden"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-5 md:px-6 py-4 border-b border-white/10">
+              <h2 className="text-white text-lg md:text-xl tracking-wide">{t('common.searchProjects')}</h2>
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(false)}
+                className="text-white/70 hover:text-white text-sm"
+              >
+                {t('common.close')}
+              </button>
+            </div>
+
+            <div className="p-5 md:p-6">
+              <input
+                ref={searchInputRef}
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder={t('common.searchPlaceholder')}
+                className="w-full h-11 bg-black/40 border border-white/20 rounded px-3 text-white outline-none focus:border-white/45"
+              />
+
+              <div className="mt-4 max-h-[55vh] overflow-auto pr-1">
+                {!normalizedSearchTerm && (
+                  <p className="text-white/60 text-sm">{t('common.searchHint')}</p>
+                )}
+
+                {normalizedSearchTerm && searchResults.length === 0 && (
+                  <p className="text-white/60 text-sm">{t('common.searchNoResults')}</p>
+                )}
+
+                {searchResults.length > 0 && (
+                  <div className="space-y-2">
+                    {searchResults.map((project) => (
+                      <Link
+                        key={project.id}
+                        to={`/projects/${project.id}`}
+                        onClick={() => {
+                          setIsSearchOpen(false);
+                          setSearchTerm('');
+                        }}
+                        className="block px-3 py-3 rounded border border-white/10 hover:bg-white/10 transition-colors"
+                      >
+                        <p className="text-white text-sm md:text-base">{getProjectName(project, lang)}</p>
+                        <p className="text-white/65 text-xs md:text-sm mt-1">{getProjectLocation(project, lang)}</p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 export default Navigation;
+

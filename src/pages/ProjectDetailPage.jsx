@@ -2,12 +2,14 @@ import { useParams } from 'react-router-dom';
 import { projects } from '../content/projects';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PictureImage from '../components/PictureImage';
+import { getCategoryLabel, getProjectClient, getProjectDescription, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
 export function ProjectDetailPage() {
+  const { lang, t } = useLanguage();
   const { id } = useParams();
   const project = projects.find(p => p.id === id);
 
-  if (!project) return <div className="min-h-screen bg-[#181818] flex items-center justify-center text-white">Project not found</div>;
+  if (!project) return <div className="min-h-screen bg-[#181818] flex items-center justify-center text-white">{t('detail.notFound')}</div>;
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
@@ -92,7 +94,7 @@ export function ProjectDetailPage() {
       <div className="relative h-screen w-full bg-black overflow-hidden">
         <PictureImage
           imagePath={images[currentImageIndex]}
-          alt={`${project.name} - Image ${currentImageIndex + 1}`}
+          alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
           className={`block h-screen w-auto max-w-none mx-auto object-contain transition-all duration-[420ms] ease-out will-change-transform ${
             isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
           }`}
@@ -100,9 +102,9 @@ export function ProjectDetailPage() {
 
         {/* 项目名称和地点在图片左下角 */}
         <div className="absolute bottom-8 left-8 z-10">
-          <h2 className="text-2xl md:text-3xl font-normal tracking-wider text-white drop-shadow-lg mb-2">{project.name}</h2>
-          <p className="text-base md:text-lg text-white/90 drop-shadow-md">{project.location}</p>
-          <p className="text-sm text-white/70 uppercase tracking-wider">{project.statusLabel} · {project.categoryLabel}</p>
+          <h2 className="text-2xl md:text-3xl font-normal tracking-wider text-white drop-shadow-lg mb-2">{getProjectName(project, lang)}</h2>
+          <p className="text-base md:text-lg text-white/90 drop-shadow-md">{getProjectLocation(project, lang)}</p>
+          <p className="text-sm text-white/70 uppercase tracking-wider">{getStatusLabel(project.status, lang)} · {getCategoryLabel(project.category, lang)}</p>
         </div>
 
         {/* 左右切换箭头 - 方形按钮略微缩小 */}
@@ -128,27 +130,27 @@ export function ProjectDetailPage() {
       <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-8 py-12">
           <div className="space-y-4 text-white">
-            <p><span className="text-white/70">Client:</span> {project.client}</p>
-            {project.year && <p><span className="text-white/70">Year:</span> {project.year}</p>}
-            {project.grossFloorArea && <p><span className="text-white/70">Area:</span> {project.grossFloorArea}</p>}
+            <p><span className="text-white/70">{t('detail.client')}:</span> {getProjectClient(project, lang)}</p>
+            {project.year && <p><span className="text-white/70">{t('detail.year')}:</span> {project.year}</p>}
+            {project.grossFloorArea && <p><span className="text-white/70">{t('detail.area')}:</span> {project.grossFloorArea}</p>}
             {project.status && (
               <p>
-                <span className="text-white/70">Status:</span>{' '}
+                <span className="text-white/70">{t('detail.status')}:</span>{' '}
                 <span className={`inline-block px-2 py-0.5 rounded text-xs ${
                   project.status === 'finalized' ? 'bg-green-500/30 text-green-300' :
                   project.status === 'under-construction' ? 'bg-yellow-500/30 text-yellow-300' :
                   'bg-gray-500/30 text-gray-300'
                 }`}>
-                  {project.statusLabel}
+                  {getStatusLabel(project.status, lang)}
                 </span>
               </p>
             )}
-            {project.category && <p><span className="text-white/70">Category:</span> {project.categoryLabel}</p>}
+            {project.category && <p><span className="text-white/70">{t('detail.category')}:</span> {getCategoryLabel(project.category, lang)}</p>}
           </div>
 
-          {project.description && (
+          {getProjectDescription(project, lang) && (
             <div className="mt-8 pt-8 border-t border-white/10">
-              <p className="text-white/80 leading-relaxed">{project.description}</p>
+              <p className="text-white/80 leading-relaxed">{getProjectDescription(project, lang)}</p>
             </div>
           )}
         </div>
@@ -158,4 +160,5 @@ export function ProjectDetailPage() {
 }
 
 export default ProjectDetailPage;
+
 

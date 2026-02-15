@@ -1,28 +1,29 @@
 import { projects } from '../content/projects';
 import { Link } from 'react-router-dom';
 import PictureImage from '../components/PictureImage';
+import { getCategoryLabel, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
 // 项目卡片组件
-function ProjectCard({ project, className = '', aspectRatio = 'aspect-[16/9]' }) {
+function ProjectCard({ project, lang, className = '', aspectRatio = 'aspect-[16/9]' }) {
   return (
     <div className={`relative group cursor-pointer overflow-hidden ${className}`}>
       <div className={`relative w-full ${aspectRatio}`}>
         <PictureImage
           imagePath={project.imagePath}
-          alt={project.name}
+          alt={getProjectName(project, lang)}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
         <div className="absolute bottom-4 left-4 z-10">
           <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
             <h3 className="text-sm font-bold text-white drop-shadow-lg">
-              {project.name}
+              {getProjectName(project, lang)}
             </h3>
             <p className="text-sm text-white/80 drop-shadow-md">
-              {project.location}
+              {getProjectLocation(project, lang)}
             </p>
             <span className="text-sm text-white/60 uppercase tracking-wider">
-              {project.statusLabel} · {project.categoryLabel}
+              {getStatusLabel(project.status, lang)} · {getCategoryLabel(project.category, lang)}
             </span>
           </div>
         </div>
@@ -36,6 +37,7 @@ function ProjectCard({ project, className = '', aspectRatio = 'aspect-[16/9]' })
 }
 
 export function ProposedProjectsPage() {
+  const { lang } = useLanguage();
   // 筛选"提案中"项目
   const proposedProjects = projects.filter(p => p.status === 'proposed');
 
@@ -49,7 +51,7 @@ export function ProposedProjectsPage() {
         {/* 第1行: 全宽大图 */}
         {row1Project && (
           <div className="mb-3">
-            <ProjectCard project={row1Project} aspectRatio="aspect-[21/9]" />
+            <ProjectCard project={row1Project} lang={lang} aspectRatio="aspect-[21/9]" />
           </div>
         )}
       </div>
@@ -58,4 +60,5 @@ export function ProposedProjectsPage() {
 }
 
 export default ProposedProjectsPage;
+
 

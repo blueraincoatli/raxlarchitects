@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { projects } from '../content/projects';
 import PictureImage from '../components/PictureImage';
+import { getCategoryLabel, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
 function AllProjectsPage() {
+  const { lang } = useLanguage();
   // 分割项目为左右两列，交替摆放
   // 左列：奇数位置 1,3,5,7,9,11
   // 右列：偶数位置 2,4,6,8,10
@@ -32,13 +34,13 @@ function AllProjectsPage() {
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                   <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
                     <h3 className="text-sm font-bold text-white drop-shadow-lg">
-                      {project.name}
+                      {getProjectName(project, lang)}
                     </h3>
                     <p className="text-sm text-white/80 drop-shadow-md">
-                      {project.location}
+                      {getProjectLocation(project, lang)}
                     </p>
                     <span className="text-sm text-white/60 uppercase tracking-wider">
-                      {project.statusLabel} · {project.categoryLabel}
+                      {getStatusLabel(project.status, lang)} · {getCategoryLabel(project.category, lang)}
                     </span>
                   </div>
                 </div>
@@ -66,13 +68,13 @@ function AllProjectsPage() {
                 <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 via-black/40 to-transparent">
                   <div className="flex flex-wrap gap-x-4 gap-y-1 items-end">
                     <h3 className="text-sm font-bold text-white drop-shadow-lg">
-                      {project.name}
+                      {getProjectName(project, lang)}
                     </h3>
                     <p className="text-sm text-white/80 drop-shadow-md">
-                      {project.location}
+                      {getProjectLocation(project, lang)}
                     </p>
                     <span className="text-sm text-white/60 uppercase tracking-wider">
-                      {project.statusLabel} · {project.categoryLabel}
+                      {getStatusLabel(project.status, lang)} · {getCategoryLabel(project.category, lang)}
                     </span>
                   </div>
                 </div>
@@ -86,3 +88,4 @@ function AllProjectsPage() {
 }
 
 export default AllProjectsPage;
+

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { projects } from '../content/projects';
 import { Link } from 'react-router-dom';
+import { getProjectLocation, getProjectName, useLanguage } from '../i18n.jsx';
 
 // 首页轮播图数据 - 支持桌面版和移动版
 const homeSlides = [
@@ -22,6 +23,7 @@ const homeSlides = [
 ];
 
 function HomePage() {
+  const { t, lang } = useLanguage();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -102,17 +104,17 @@ function HomePage() {
       <div className="absolute inset-0 flex items-center justify-center z-20">
         {currentProject ? (
           <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-normal tracking-wider text-white mb-2">{currentProject.name}</h2>
-            <p className="text-lg md:text-xl text-white/90 mb-6">{currentProject.location}</p>
+            <h2 className="text-3xl md:text-4xl font-normal tracking-wider text-white mb-2">{getProjectName(currentProject, lang)}</h2>
+            <p className="text-lg md:text-xl text-white/90 mb-6">{getProjectLocation(currentProject, lang)}</p>
             <Link
               to={`/projects/${currentProject.id}`}
               className="inline-block px-6 py-2 border border-white/50 text-white hover:bg-white hover:text-gray-900 transition-colors text-sm tracking-wide"
             >
-              VIEW PROJECT
+              {t('common.viewProject')}
             </Link>
           </div>
         ) : (
-          <p className="text-white/60">Loading...</p>
+          <p className="text-white/60">{t('common.loading')}</p>
         )}
       </div>
 
@@ -149,3 +151,4 @@ function HomePage() {
 }
 
 export default HomePage;
+

@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { projects } from '../content/projects';
-import { projectPriorityMap, projectsDisplayConfig } from '../content/projects-display-config';
+import { categoryPriorityOverrides, projectPriorityMap, projectsDisplayConfig } from '../content/projects-display-config';
 import PictureImage from '../components/PictureImage';
 
 function normalizeImageItems(project, maxImagesPerProject, forcePaths = null) {
@@ -64,6 +64,15 @@ function interleaveByProject(cards) {
   return result;
 }
 
+function getProjectPriority(projectId, category = '') {
+  const categoryOverrides = categoryPriorityOverrides[category];
+  if (categoryOverrides && categoryOverrides[projectId] !== undefined) {
+    return categoryOverrides[projectId];
+  }
+
+  return projectPriorityMap[projectId] || 0;
+}
+
 function buildCards(filteredProjects, options = {}) {
   const specialCategory = specialCategoryConfig[options.category];
   const mode = projectsDisplayConfig.mode === 'multi' ? 'multi' : 'single';
@@ -74,7 +83,7 @@ function buildCards(filteredProjects, options = {}) {
     : 1;
 
   const sortedProjects = [...filteredProjects].sort((a, b) => {
-    const priorityDiff = (projectPriorityMap[b.id] || 0) - (projectPriorityMap[a.id] || 0);
+    const priorityDiff = getProjectPriority(b.id, options.category) - getProjectPriority(a.id, options.category);
     if (priorityDiff !== 0) {
       return priorityDiff;
     }
@@ -88,7 +97,7 @@ function buildCards(filteredProjects, options = {}) {
   });
 
   const cards = sortedProjects.flatMap(project => {
-    const basePriority = projectPriorityMap[project.id] || 0;
+    const basePriority = getProjectPriority(project.id, options.category);
     const forcedPaths = specialCategory ? project[specialCategory.imageField] : null;
     const imageItems = normalizeImageItems(project, maxImagesPerProject, forcedPaths);
 
@@ -104,12 +113,13 @@ function buildCards(filteredProjects, options = {}) {
   return interleaveByProject(cards);
 }
 
-function ProjectCard({ card, aspectRatio = 'aspect-[16/9]' }) {
+function ProjectCard({ card, aspectRatio = 'aspect-[16/9]', heightClass = '', className = '' }) {
   const { project, imagePath, imageTitle } = card;
+  const mediaSizeClass = heightClass || aspectRatio;
 
   return (
-    <div className="relative group cursor-pointer overflow-hidden">
-      <div className={`relative w-full ${aspectRatio}`}>
+    <div className={`relative group cursor-pointer overflow-hidden ${className}`}>
+      <div className={`relative w-full ${mediaSizeClass}`}>
         <PictureImage
           imagePath={imagePath}
           alt={imageTitle ? `${project.name} · ${imageTitle}` : project.name}
@@ -138,7 +148,7 @@ function ProjectCard({ card, aspectRatio = 'aspect-[16/9]' }) {
   );
 }
 
-function CategoryProjectSection({ project, cards, sectionLabel }) {
+function CategoryProjectSection({ cards }) {
   const heroCard = cards[0];
   const twoColumnCards = cards.slice(1, 3);
   const fourGridCards = cards.slice(3, 7);
@@ -146,12 +156,6 @@ function CategoryProjectSection({ project, cards, sectionLabel }) {
 
   return (
     <section className="mb-8">
-      <div className="mb-3">
-        <h2 className="text-sm md:text-base text-white/90 tracking-wider uppercase">
-          {project.name} · {sectionLabel}
-        </h2>
-      </div>
-
       {heroCard && (
         <div className="mb-3">
           <ProjectCard card={heroCard} aspectRatio="aspect-[21/9]" />
@@ -185,6 +189,25 @@ function CategoryProjectSection({ project, cards, sectionLabel }) {
   );
 }
 
+function classifyArchitectureCards(cards) {
+  const level1 = [];
+  const level2 = [];
+  const level3 = [];
+
+  cards.forEach(card => {
+    const score = getProjectPriority(card.project.id, 'architecture');
+    if (score >= 215) {
+      level1.push(card);
+    } else if (score >= 200) {
+      level2.push(card);
+    } else {
+      level3.push(card);
+    }
+  });
+
+  return { level1, level2, level3 };
+}
+
 export function ProjectsPage() {
   const [searchParams] = useSearchParams();
   const status = searchParams.get('status') || '';
@@ -202,7 +225,7 @@ export function ProjectsPage() {
   const activeSpecialCategory = specialCategoryConfig[category];
   const specialSections = activeSpecialCategory
     ? [...filteredProjects]
-      .sort((a, b) => (projectPriorityMap[b.id] || 0) - (projectPriorityMap[a.id] || 0))
+      .sort((a, b) => getProjectPriority(b.id, category) - getProjectPriority(a.id, category))
       .map(project => ({
         project,
         cards: normalizeImageItems(project, 200, project[activeSpecialCategory.imageField])
@@ -222,6 +245,7 @@ export function ProjectsPage() {
   const useFinalizedFeaturedLayout = status === 'finalized' && !category && cards.length >= 4;
   const secondHeroCard = useFinalizedFeaturedLayout ? cards[3] : null;
   const finalizedSmallCards = useFinalizedFeaturedLayout ? cards.slice(4) : [];
+  const architectureLevels = category === 'architecture' ? classifyArchitectureCards(cards) : null;
 
   return (
     <div className="min-h-screen pt-16 bg-[#0a0a0a]">
@@ -241,12 +265,135 @@ export function ProjectsPage() {
             {specialSections.map(section => (
               <CategoryProjectSection
                 key={`${category}-section-${section.project.id}`}
-                project={section.project}
                 cards={section.cards}
-                sectionLabel={activeSpecialCategory.sectionLabel}
               />
             ))}
           </>
+        ) : category === 'architecture' ? (
+          (() => {
+            const used = new Set();
+
+            const pickById = (projectId) => {
+              const found = cards.find(card => card.project.id === projectId && !used.has(card.key));
+              if (found) {
+                used.add(found.key);
+                return found;
+              }
+              return null;
+            };
+
+            const pickNext = () => {
+              const found = cards.find(card => !used.has(card.key));
+              if (found) {
+                used.add(found.key);
+                return found;
+              }
+              return null;
+            };
+
+            const row1Hero = pickById('one-park-gubei') || pickNext();
+            const row2LeftTop = pickById('royal-pavilion') || pickNext();
+            const row2LeftBottom = pickById('upper-east') || pickNext();
+            const row2Right = pickById('rongxinarc') || pickNext();
+            const row3SmallA = pickById('moment-to-cloud') || pickNext();
+            const row3SmallB = pickById('macalline-anji') || pickNext();
+            const row3Wide = pickById('prime-dynapolis') || pickNext();
+            const tailCards = cards.filter(card => !used.has(card.key));
+            const mixedRowClass = 'grid grid-cols-1 md:grid-cols-4 gap-3 mb-3 md:h-[26vw] md:min-h-[240px] md:max-h-[360px]';
+            const mixedRowCardHeight = 'h-[56vw] min-h-[240px] max-h-[360px] md:h-full';
+
+            return (
+              <>
+                {row1Hero && (
+                  <div className="mb-3">
+                    <ProjectCard card={row1Hero} aspectRatio="aspect-[21/9]" />
+                  </div>
+                )}
+
+                {(row2LeftTop || row2LeftBottom || row2Right) && (
+                  <div className={mixedRowClass}>
+                    {row2LeftTop && (
+                      <div className="md:col-span-1">
+                        <ProjectCard card={row2LeftTop} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                    {row2LeftBottom && (
+                      <div className="md:col-span-1">
+                        <ProjectCard card={row2LeftBottom} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                    {row2Right && (
+                      <div className="md:col-span-2">
+                        <ProjectCard card={row2Right} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(row3SmallA || row3SmallB || row3Wide) && (
+                  <div className={mixedRowClass}>
+                    {row3Wide && (
+                      <div className="md:col-span-2">
+                        <ProjectCard card={row3Wide} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                    {row3SmallA && (
+                      <div className="md:col-span-1">
+                        <ProjectCard card={row3SmallA} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                    {row3SmallB && (
+                      <div className="md:col-span-1">
+                        <ProjectCard card={row3SmallB} heightClass={mixedRowCardHeight} className="h-full" />
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {tailCards.length > 0 && (
+                  <div>
+                    {Array.from({ length: Math.ceil(tailCards.length / 3) }, (_, rowIndex) => {
+                      const row = tailCards.slice(rowIndex * 3, rowIndex * 3 + 3);
+
+                      if (row.length === 1) {
+                        return (
+                          <div key={`tail-row-${rowIndex}`} className="mb-3 last:mb-0">
+                            <ProjectCard card={row[0]} aspectRatio="aspect-[16/6]" />
+                          </div>
+                        );
+                      }
+
+                      if (row.length === 2) {
+                        return (
+                          <div key={`tail-row-${rowIndex}`} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 last:mb-0">
+                            <ProjectCard card={row[0]} aspectRatio="aspect-[16/7]" />
+                            <ProjectCard card={row[1]} aspectRatio="aspect-[16/7]" />
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div
+                          key={`tail-row-${rowIndex}`}
+                          className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3 last:mb-0 md:h-[26vw] md:min-h-[240px] md:max-h-[360px]"
+                        >
+                          <div className="md:col-span-1">
+                            <ProjectCard card={row[0]} heightClass="h-[56vw] min-h-[240px] max-h-[360px] md:h-full" className="h-full" />
+                          </div>
+                          <div className="md:col-span-1">
+                            <ProjectCard card={row[1]} heightClass="h-[56vw] min-h-[240px] max-h-[360px] md:h-full" className="h-full" />
+                          </div>
+                          <div className="md:col-span-2">
+                            <ProjectCard card={row[2]} heightClass="h-[56vw] min-h-[240px] max-h-[360px] md:h-full" className="h-full" />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            );
+          })()
         ) : (
           <>
             {heroCard && (

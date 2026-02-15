@@ -18,3 +18,12 @@ export const projectPriorityMap = {
   'content-office-shop': 76,
   'content-show': 74,
 };
+
+// Optional per-category priority overrides for Projects filtering pages.
+export const categoryPriorityOverrides = {
+  architecture: {
+    'one-park-gubei': 220,
+    'prime-dynapolis': 215,
+    'macalline-anji': 205,
+  },
+};

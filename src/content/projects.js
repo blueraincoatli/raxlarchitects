@@ -14,6 +14,15 @@ export const projects = [
     category: 'architecture',
     categoryLabel: '建筑',
     subCategory: 'landscape',
+    landscapeImages: [
+      '/images/projects/one-park-gubei/28-one-park-gubei',
+      '/images/projects/one-park-gubei/22-one-park-gubei',
+      '/images/projects/one-park-gubei/23-one-park-gubei',
+      '/images/projects/one-park-gubei/24-one-park-gubei',
+      '/images/projects/one-park-gubei/25-one-park-gubei',
+      '/images/projects/one-park-gubei/26-one-park-gubei',
+      '/images/projects/one-park-gubei/27-one-park-gubei',
+    ],
     imagePath: '/images/projects/01-one-park-gubei',
     gallery: [
       '/images/projects/one-park-gubei/01-one-park-gubei',
@@ -57,6 +66,11 @@ export const projects = [
     category: 'architecture',
     categoryLabel: '建筑',
     subCategory: 'landscape',
+    landscapeImages: [
+      '/images/projects/upper-east/06-upper-east',
+      '/images/projects/upper-east/02-upper-east',
+      '/images/projects/upper-east/04-upper-east',
+    ],
     imagePath: '/images/projects/03-upper-east',
     gallery: [
       '/images/projects/upper-east/01-upper-east',
@@ -176,6 +190,13 @@ export const projects = [
     statusLabel: '已建成',
     category: 'interior',
     categoryLabel: '室内',
+    interiorImages: [
+      '/images/projects/chairclub/01-chairclub',
+      '/images/projects/chairclub/02-chairclub',
+      '/images/projects/chairclub/03-chairclub',
+      '/images/projects/chairclub/04-chairclub',
+      '/images/projects/chairclub/05-chairclub',
+    ],
     imagePath: '/images/projects/09-chairclub',
     gallery: [
       '/images/projects/chairclub/01-chairclub',
@@ -198,6 +219,12 @@ export const projects = [
     statusLabel: '已建成',
     category: 'interior',
     categoryLabel: '室内',
+    interiorImages: [
+      '/images/projects/content-office-shop/01-content-office-shop',
+      '/images/projects/content-office-shop/02-content-office-shop',
+      '/images/projects/content-office-shop/03-content-office-shop',
+      '/images/projects/content-office-shop/04-content-office-shop',
+    ],
     imagePath: '/images/projects/10-content-office-shop',
     gallery: [
       '/images/projects/content-office-shop/01-content-office-shop',
@@ -213,8 +240,8 @@ export const projects = [
     client: '上海市绿化局',
     year: '2021',
     grossFloorArea: '65,000 m²',
-    status: 'proposed',
-    statusLabel: '其他',
+    status: 'finalized',
+    statusLabel: '已建成',
     category: 'other',
     categoryLabel: '其他',
     imagePath: '/images/projects/11-content show',

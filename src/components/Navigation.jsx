@@ -15,14 +15,14 @@ function Navigation({ className = "" }) {
       hasSubmenu: true,
       submenu: [
         {group: 'STATUS', items: [
-          {label: 'FINALIZED PROJECT', filter: 'finalized'},
-          {label: 'UNDER CONSTRUCTION', path: '/under-construction'},
-          {label: 'PROPOSED PROJECT', path: '/proposed'},
+          { label: 'FINALIZED PROJECT', path: '/projects?status=finalized' },
+          { label: 'UNDER CONSTRUCTION', path: '/projects?status=under-construction' },
+          { label: 'PROPOSED PROJECT', path: '/projects?status=proposed' },
         ]},
         { group: 'CATEGORY', items: [
-          { label: 'ARCHITECTURE', filter: 'architecture' },
-          { label: 'INTERIOR', filter: 'interior' },
-          { label: 'LANDSCAPE', filter: 'landscape' },
+          { label: 'ARCHITECTURE', path: '/projects?category=architecture' },
+          { label: 'INTERIOR', path: '/projects?category=interior' },
+          { label: 'LANDSCAPE', path: '/projects?category=landscape' },
         ]},
       ]
     },
@@ -88,7 +88,7 @@ function Navigation({ className = "" }) {
                             {group.items.map((subItem, idx) => (
                               <Link
                                 key={idx}
-                                to={subItem.path ? subItem.path : `${item.path}?filter=${subItem.filter}`}
+                                to={subItem.path}
                                 className="block px-4 py-2 text-sm text-white/90 hover:text-white hover:bg-white/10 transition-colors"
                               >
                                 {subItem.label}

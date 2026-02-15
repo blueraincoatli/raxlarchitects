@@ -89,7 +89,8 @@
       "Bash(pip install:*)",
       "Bash(magick identify:*)",
       "Bash(ffprobe:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(npm run check:*)"
     ]
   }
 }

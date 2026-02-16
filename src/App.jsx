@@ -11,7 +11,7 @@ import ContactPage from './pages/ContactPage';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#181818] relative">
+      <div className="min-h-screen bg-[#181818] relative overflow-x-hidden">
         <Navigation />
         <main>
           <Routes>

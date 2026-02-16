@@ -8,6 +8,8 @@ function Navigation({ className = "" }) {
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mobileOpenGroup, setMobileOpenGroup] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null);
   const { lang, setLang, t } = useLanguage();
@@ -85,11 +87,11 @@ function Navigation({ className = "" }) {
 
   return (
     <>
-      <nav className={`absolute top-0 left-0 right-0 z-50 px-6 lg:px-10 py-4 flex items-center justify-between transition-colors duration-300 hover:bg-black/30 ${className}`}>
+      <nav className={`absolute top-0 left-0 right-0 z-50 px-4 md:px-6 lg:px-10 py-4 flex items-center justify-between transition-colors duration-300 hover:bg-black/30 ${className}`}>
         <Link to="/" className="flex items-center gap-2">
-          <img src={logo} alt="RA Architects" className="h-8 w-auto" />
+          <img src={logo} alt="RA Architects" className="h-7 md:h-8 w-auto" />
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-6">
         {navItems.map(item => (
           item.hasSubmenu ? (
             <div
@@ -187,7 +189,108 @@ function Navigation({ className = "" }) {
           {t('nav.langToggle')}
         </button>
         </div>
+
+        <button
+          type="button"
+          className="md:hidden text-white/90 text-sm tracking-wider border border-white/30 px-3 py-1 rounded"
+          onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          aria-label="Toggle mobile menu"
+        >
+          MENU
+        </button>
       </nav>
+
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[65] md:hidden" onClick={() => setIsMobileMenuOpen(false)}>
+          <div className="absolute inset-0 bg-black/65" />
+          <div
+            className="absolute top-0 right-0 h-full w-[82vw] max-w-[360px] bg-[#181818] border-l border-white/15 p-5 overflow-y-auto"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-5">
+              <span className="text-white text-sm tracking-wider">MENU</span>
+              <button
+                type="button"
+                className="text-white/70 text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {t('common.close')}
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {navItems.map((item) => (
+                <div key={`mobile-${item.path}`} className="border-b border-white/10 pb-3">
+                  {!item.hasSubmenu ? (
+                    <Link
+                      to={item.path}
+                      className="block text-white/90 tracking-wider"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="w-full text-left text-white/90 tracking-wider"
+                        onClick={() => setMobileOpenGroup((prev) => (prev === item.path ? null : item.path))}
+                      >
+                        {item.label}
+                      </button>
+                      {mobileOpenGroup === item.path && (
+                        <div className="mt-2 pl-3 space-y-2">
+                          {item.submenu[0]?.group
+                            ? item.submenu.flatMap((group) => group.items).map((subItem, idx) => (
+                                <Link
+                                  key={`mobile-sub-${item.path}-${idx}`}
+                                  to={subItem.path}
+                                  className="block text-white/75 text-sm"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {subItem.label}
+                                </Link>
+                              ))
+                            : item.submenu.map((subItem, idx) => (
+                                <Link
+                                  key={`mobile-sub-${item.path}-${idx}`}
+                                  to={subItem.path}
+                                  className="block text-white/75 text-sm"
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                  {subItem.label}
+                                </Link>
+                              ))}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSearchOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-white/85 text-sm tracking-wider"
+              >
+                {t('nav.search')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setLang(lang === 'en' ? 'zh' : 'en')}
+                className="text-white/85 text-sm tracking-wider"
+              >
+                {t('nav.langToggle')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {isSearchOpen && (
         <div className="fixed inset-0 z-[70] bg-black/75 backdrop-blur-sm px-4 py-24 md:py-28" onClick={() => setIsSearchOpen(false)}>

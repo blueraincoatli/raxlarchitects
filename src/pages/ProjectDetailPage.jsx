@@ -92,11 +92,11 @@ export function ProjectDetailPage() {
   return (
     <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
-      <div className="relative h-screen w-full bg-black overflow-hidden">
+      <div className="relative w-full bg-black overflow-hidden md:h-screen">
         <PictureImage
           imagePath={images[currentImageIndex]}
           alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
-          className={`block h-screen w-auto max-w-none mx-auto object-contain transition-all duration-[420ms] ease-out will-change-transform ${
+          className={`block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto transition-all duration-[420ms] ease-out will-change-transform ${
             isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
           }`}
         />

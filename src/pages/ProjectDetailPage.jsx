@@ -7,7 +7,16 @@ import { formatDetailLabel, getCategoryLabel, getProjectDetailEntries, getProjec
 // Cloudflare Stream Video Player Component
 function StreamVideoPlayer({ videoId, customerCode, title, thumbnailPath }) {
   // controls=true 显示默认控件：播放/暂停、进度条、音量、全屏
-  const src = `https://customer-${customerCode}.cloudflarestream.com/${videoId}/iframe?muted=true&preload=metadata&controls=true${thumbnailPath ? `&poster=${encodeURIComponent(thumbnailPath)}` : ''}`;
+  // poster 需要完整的 URL，构造完整路径
+  const getPosterUrl = () => {
+    if (!thumbnailPath) return '';
+    // 构造完整 URL（使用当前域名 + 路径 + .jpg）
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const fullPath = `${baseUrl}${thumbnailPath}.jpg`;
+    return `&poster=${encodeURIComponent(fullPath)}`;
+  };
+  
+  const src = `https://customer-${customerCode}.cloudflarestream.com/${videoId}/iframe?muted=true&preload=metadata&controls=true${getPosterUrl()}`;
   
   return (
     <div className="relative w-full bg-black rounded-sm overflow-hidden" style={{ paddingTop: '56.25%' }}>

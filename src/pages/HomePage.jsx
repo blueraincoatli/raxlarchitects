@@ -9,17 +9,17 @@ const homeSlides = [
   { id: 'desktop-1', image: '/images/home/01-gubei', type: 'desktop', project: 'one-park-gubei' },
   { id: 'desktop-2', image: '/images/home/02-gubei', type: 'desktop', project: 'one-park-gubei' },
   { id: 'desktop-3', image: '/images/home/03-gubei', type: 'desktop', project: 'one-park-gubei' },
-  { id: 'desktop-4', image: '/images/home/04-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
-  { id: 'desktop-5', image: '/images/home/05-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
-  { id: 'desktop-6', image: '/images/home/06-huashan', type: 'desktop', project: 'royal-pavilion-huashan' },
+  { id: 'desktop-4', image: '/images/home/04-huashan', type: 'desktop', project: 'royal-pavilion' },
+  { id: 'desktop-5', image: '/images/home/05-huashan', type: 'desktop', project: 'royal-pavilion' },
+  { id: 'desktop-6', image: '/images/home/06-huashan', type: 'desktop', project: 'royal-pavilion' },
 
   // 移动版（竖版）- 使用小图
   { id: 'mobile-1', image: '/images/home/m-01-gubei', type: 'mobile', project: 'one-park-gubei' },
   { id: 'mobile-2', image: '/images/home/m-02-gubei', type: 'mobile', project: 'one-park-gubei' },
   { id: 'mobile-3', image: '/images/home/m-03-gubei', type: 'mobile', project: 'one-park-gubei' },
-  { id: 'mobile-4', image: '/images/home/m-04-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
-  { id: 'mobile-5', image: '/images/home/m-05-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
-  { id: 'mobile-6', image: '/images/home/m-06-huashan', type: 'mobile', project: 'royal-pavilion-huashan' },
+  { id: 'mobile-4', image: '/images/home/m-04-huashan', type: 'mobile', project: 'royal-pavilion' },
+  { id: 'mobile-5', image: '/images/home/m-05-huashan', type: 'mobile', project: 'royal-pavilion' },
+  { id: 'mobile-6', image: '/images/home/m-06-huashan', type: 'mobile', project: 'royal-pavilion' },
 ];
 
 function HomePage() {

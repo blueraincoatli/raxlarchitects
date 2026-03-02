@@ -263,7 +263,7 @@ export function ProjectDetailPage() {
                       <button
                         key={index}
                         onClick={() => handleThumbnailClick(index)}
-                        className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
+                        className={`flex-shrink-0 relative overflow-hidden transition-all duration-200 ${
                           index === currentImageIndex 
                             ? 'ring-2 ring-white ring-offset-2 ring-offset-black/60 scale-105' 
                             : 'opacity-70 hover:opacity-100'

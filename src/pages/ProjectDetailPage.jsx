@@ -134,15 +134,6 @@ export function ProjectDetailPage() {
     }
   };
 
-  // 处理底部区域的鼠标事件
-  const handleBottomMouseEnter = () => {
-    setShowThumbnails(true);
-  };
-
-  const handleBottomMouseLeave = () => {
-    setShowThumbnails(false);
-  };
-
   return (
     <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
@@ -180,82 +171,111 @@ export function ProjectDetailPage() {
           </>
         )}
 
-        {/* 底部 1/3 悬停/触摸区域 */}
+        {/* 缩略图导航栏容器 - 底部悬停区域和缩略图一起 */}
         {images.length > 1 && (
           <div 
-            className="absolute bottom-0 left-0 right-0 h-1/3 z-30"
-            onMouseEnter={!isMobile ? handleBottomMouseEnter : undefined}
-            onMouseLeave={!isMobile ? handleBottomMouseLeave : undefined}
+            className="absolute bottom-0 left-0 right-0 z-20"
+            onMouseEnter={!isMobile ? () => setShowThumbnails(true) : undefined}
+            onMouseLeave={!isMobile ? () => setShowThumbnails(false) : undefined}
             onTouchStart={isMobile ? () => setShowThumbnails(true) : undefined}
-          />
-        )}
-
-        {/* 缩略图导航栏 - 叠在大图底部，居中显示 */}
-        {images.length > 1 && (
-          <div 
-            className={`absolute bottom-0 left-0 right-0 z-20 transition-all duration-300 ease-out pointer-events-none ${
-              showThumbnails ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-            }`}
           >
-            {/* 渐变遮罩背景 */}
-            <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-4">
-              {/* 居中的缩略图容器，两端渐隐 */}
-              <div className="relative mx-auto max-w-4xl px-12">
-                {/* 左侧渐隐遮罩 */}
-                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
-                {/* 右侧渐隐遮罩 */}
-                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
-                
-                {/* 缩略图滚动容器 */}
-                <div 
-                  ref={thumbnailsRef}
-                  className="flex gap-3 overflow-x-auto scrollbar-hide py-2 px-4 pointer-events-auto"
-                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                  {images.map((imagePath, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleThumbnailClick(index)}
-                      className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
-                        index === currentImageIndex 
-                          ? 'ring-2 ring-white ring-offset-2 ring-offset-black/50 scale-105' 
-                          : 'opacity-60 hover:opacity-90'
-                      }`}
-                      style={{ width: '80px', height: '60px' }}
-                    >
-                      <img
-                        src={`${imagePath}.jpg`}
-                        alt={`Thumbnail ${index + 1}`}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                    </button>
-                  ))}
+            {/* 底部 1/3 透明触发区域 - 仅在缩略图隐藏时有效 */}
+            {!showThumbnails && (
+              <div className="h-[33vh] w-full" />
+            )}
+
+            {/* 缩略图导航栏 - 使用 mask 实现两端渐隐 */}
+            <div 
+              className={`transition-all duration-300 ease-out ${
+                showThumbnails ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full pointer-events-none'
+              }`}
+            >
+              {/* 渐变遮罩背景 - 固定高度，不撑开 */}
+              <div 
+                className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-12 pb-4"
+                style={{
+                  maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)'
+                }}
+              >
+                {/* 居中的缩略图容器 */}
+                <div className="mx-auto max-w-4xl px-8">
+                  {/* 缩略图滚动容器 - 原生拖拽滚动 */}
+                  <div 
+                    ref={thumbnailsRef}
+                    className="flex gap-3 overflow-x-auto cursor-grab active:cursor-grabbing py-2 px-4"
+                    style={{ 
+                      scrollbarWidth: 'none', 
+                      msOverflowStyle: 'none',
+                      WebkitOverflowScrolling: 'touch'
+                    }}
+                    onMouseDown={(e) => {
+                      const ele = e.currentTarget;
+                      ele.style.cursor = 'grabbing';
+                      const startX = e.pageX - ele.offsetLeft;
+                      const scrollLeft = ele.scrollLeft;
+                      
+                      const onMouseMove = (e) => {
+                        e.preventDefault();
+                        const x = e.pageX - ele.offsetLeft;
+                        const walk = (x - startX) * 1.5;
+                        ele.scrollLeft = scrollLeft - walk;
+                      };
+                      
+                      const onMouseUp = () => {
+                        ele.style.cursor = 'grab';
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                      };
+                      
+                      document.addEventListener('mousemove', onMouseMove);
+                      document.addEventListener('mouseup', onMouseUp);
+                    }}
+                  >
+                    {images.map((imagePath, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleThumbnailClick(index)}
+                        className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
+                          index === currentImageIndex 
+                            ? 'ring-2 ring-white ring-offset-2 ring-offset-black/60 scale-105' 
+                            : 'opacity-70 hover:opacity-100'
+                        }`}
+                        style={{ width: '80px', height: '60px' }}
+                      >
+                        <img
+                          src={`${imagePath}.jpg`}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover pointer-events-none"
+                          loading="lazy"
+                          draggable={false}
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              
-              {/* 图片计数器 */}
-              <div className="text-center mt-3">
-                <span className="text-white/70 text-sm">
-                  {currentImageIndex + 1} / {images.length}
-                </span>
+                
+                {/* 图片计数器 */}
+                <div className="text-center mt-2">
+                  <span className="text-white/70 text-sm">
+                    {currentImageIndex + 1} / {images.length}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
         )}
 
-        {/* 底部提示条 - 当缩略图隐藏时显示 */}
+        {/* 底部进度指示器 - 当缩略图隐藏时显示 */}
         {images.length > 1 && !showThumbnails && (
-          <div className="absolute bottom-0 left-0 right-0 z-10">
-            {/* 进度点指示器 */}
+          <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
             <div className="flex justify-center gap-1.5 pb-4">
               {images.length <= 12 ? (
-                // 图片较少时显示所有点
                 images.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => handleThumbnailClick(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    className={`pointer-events-auto w-2 h-2 rounded-full transition-all duration-200 ${
                       index === currentImageIndex 
                         ? 'bg-white w-4' 
                         : 'bg-white/40 hover:bg-white/60'
@@ -263,8 +283,7 @@ export function ProjectDetailPage() {
                   />
                 ))
               ) : (
-                // 图片较多时显示简化指示器
-                <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full">
+                <div className="pointer-events-auto flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full">
                   <span className="text-white/80 text-xs">
                     {currentImageIndex + 1} / {images.length}
                   </span>

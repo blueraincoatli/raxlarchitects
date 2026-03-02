@@ -31,6 +31,7 @@ function Navigation({ className = "" }) {
           { label: t('nav.architecture'), path: '/projects?category=architecture' },
           { label: t('nav.interior'), path: '/projects?category=interior' },
           { label: t('nav.landscape'), path: '/projects?category=landscape' },
+          { label: t('nav.show'), path: '/projects?category=show' },
         ]},
       ]
     },

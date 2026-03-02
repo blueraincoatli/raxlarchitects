@@ -4,6 +4,25 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import PictureImage from '../components/PictureImage';
 import { formatDetailLabel, getCategoryLabel, getProjectDetailEntries, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
+// Cloudflare Stream Video Player Component
+function StreamVideoPlayer({ videoId, customerCode, title, thumbnailPath }) {
+  // controls=true 显示默认控件：播放/暂停、进度条、音量、全屏
+  const src = `https://customer-${customerCode}.cloudflarestream.com/${videoId}/iframe?muted=true&preload=metadata&controls=true${thumbnailPath ? `&poster=${encodeURIComponent(thumbnailPath)}` : ''}`;
+  
+  return (
+    <div className="relative w-full bg-black rounded-sm overflow-hidden" style={{ paddingTop: '56.25%' }}>
+      <iframe
+        src={src}
+        title={title || 'Video'}
+        className="absolute top-0 left-0 w-full h-full z-10"
+        style={{ border: 'none' }}
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowFullScreen
+      />
+    </div>
+  );
+}
+
 export function ProjectDetailPage() {
   const { lang, t } = useLanguage();
   const { id } = useParams();
@@ -20,7 +39,17 @@ export function ProjectDetailPage() {
   const hideTimerRef = useRef(null);
   const navBarRef = useRef(null);
   const images = project.gallery || [];
+  const videos = project.videos || [];
   const detailEntries = getProjectDetailEntries(project, lang);
+  
+  // Check if this is a video project
+  const hasVideos = videos.length > 0;
+  const hasImages = images.length > 0;
+  // For mixed projects, show videos first then images
+  const displayItems = hasVideos 
+    ? [...videos.map(v => ({ ...v, type: 'video' })), ...images.map(i => ({ path: i, type: 'image' }))]
+    : images.map(i => ({ path: i, type: 'image' }));
+  const currentItem = displayItems[currentImageIndex] || null;
   const FADE_OUT_MS = 180;
   const FADE_TOTAL_MS = 420;
   const MOBILE_HIDE_DELAY = 400;
@@ -151,15 +180,30 @@ export function ProjectDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#181818]">
-      {/* 主图片区域 - 撑满页面高度 */}
+      {/* 主图片/视频区域 - 撑满页面高度 */}
       <div className="relative w-full bg-black overflow-hidden md:h-screen">
-        <PictureImage
-          imagePath={images[currentImageIndex]}
-          alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
-          className={`block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto transition-all duration-[420ms] ease-out will-change-transform ${
+        {currentItem?.type === 'video' ? (
+          <div className={`w-full h-full flex items-center justify-center pb-20 md:pb-0 transition-all duration-[420ms] ease-out will-change-transform ${
             isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
-          }`}
-        />
+          }`}>
+            <div className="w-full max-w-5xl mx-auto px-4 md:px-8">
+              <StreamVideoPlayer
+                videoId={currentItem.videoId}
+                customerCode={currentItem.customerCode}
+                title={currentItem.title || getProjectName(project, lang)}
+                thumbnailPath={currentItem.thumbnail}
+              />
+            </div>
+          </div>
+        ) : (
+          <PictureImage
+            imagePath={currentItem?.path || images[currentImageIndex]}
+            alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
+            className={`block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto transition-all duration-[420ms] ease-out will-change-transform ${
+              isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
+            }`}
+          />
+        )}
 
         {/* 项目名称和地点在图片左下角 */}
         <div className="absolute bottom-8 left-8 z-10">
@@ -169,7 +213,7 @@ export function ProjectDetailPage() {
         </div>
 
         {/* 左右切换箭头 - 方形按钮略微缩小 */}
-        {images.length > 1 && (
+        {displayItems.length > 1 && (
           <>
             <button
               onClick={prevImage}
@@ -187,7 +231,7 @@ export function ProjectDetailPage() {
         )}
 
         {/* 底部触发区域和导航栏容器 */}
-        {images.length > 1 && (
+        {displayItems.length > 1 && (
           <div
             ref={navBarRef}
             className="absolute bottom-0 left-0 right-0 z-20"
@@ -257,7 +301,7 @@ export function ProjectDetailPage() {
                       document.addEventListener('mouseup', onMouseUp);
                     }}
                   >
-                    {images.map((imagePath, index) => (
+                    {displayItems.map((item, index) => (
                       <button
                         key={index}
                         onClick={() => handleThumbnailClick(index)}
@@ -268,22 +312,42 @@ export function ProjectDetailPage() {
                         }`}
                         style={{ width: '80px', height: '60px' }}
                       >
-                        <img
-                          src={`${imagePath}.jpg`}
-                          alt={`Thumbnail ${index + 1}`}
-                          className="w-full h-full object-cover pointer-events-none"
-                          loading="lazy"
-                          draggable={false}
-                        />
+                        {item.type === 'video' ? (
+                          <>
+                            <img
+                              src={item.thumbnail ? `${item.thumbnail}.jpg` : '/images/video-placeholder.jpg'}
+                              alt={`Video ${index + 1}`}
+                              className="w-full h-full object-cover pointer-events-none"
+                              loading="lazy"
+                              draggable={false}
+                            />
+                            {/* Video play icon overlay */}
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                              <div className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center">
+                                <svg className="w-3 h-3 text-black ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M6.3 5.84a.5.5 0 01.77-.42l7.15 4.16a.5.5 0 010 .84l-7.15 4.16a.5.5 0 01-.77-.42V5.84z" />
+                                </svg>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <img
+                            src={`${item.path || item}.jpg`}
+                            alt={`Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover pointer-events-none"
+                            loading="lazy"
+                            draggable={false}
+                          />
+                        )}
                       </button>
                     ))}
                   </div>
                 </div>
                 
-                {/* 图片计数器 */}
+                {/* 图片/视频计数器 */}
                 <div className="text-center mt-2">
                   <span className="text-white/70 text-sm">
-                    {currentImageIndex + 1} / {images.length}
+                    {currentImageIndex + 1} / {displayItems.length}
                   </span>
                 </div>
               </div>
@@ -292,11 +356,11 @@ export function ProjectDetailPage() {
         )}
 
         {/* 底部进度指示器 - 当缩略图隐藏时显示 */}
-        {images.length > 1 && !showThumbnails && (
+        {displayItems.length > 1 && !showThumbnails && (
           <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
             <div className="flex justify-center gap-1.5 pb-4">
-              {images.length <= 12 ? (
-                images.map((_, index) => (
+              {displayItems.length <= 12 ? (
+                displayItems.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => handleThumbnailClick(index)}
@@ -310,7 +374,7 @@ export function ProjectDetailPage() {
               ) : (
                 <div className="pointer-events-auto flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full">
                   <span className="text-white/80 text-xs">
-                    {currentImageIndex + 1} / {images.length}
+                    {currentImageIndex + 1} / {displayItems.length}
                   </span>
                   <div className="w-16 h-1 bg-white/20 rounded-full overflow-hidden">
                     <div 

@@ -19,6 +19,7 @@ const messages = {
       architecture: 'ARCHITECTURE',
       interior: 'INTERIOR',
       landscape: 'LANDSCAPE',
+      show: 'SHOW',
       aboutUs: 'ABOUT US',
       partners: 'PARTNERS',
       awards: 'AWARDS',
@@ -63,6 +64,7 @@ const messages = {
       architecture: '建筑',
       interior: '室内',
       landscape: '景观',
+      show: '秀场',
       aboutUs: '关于我们',
       partners: '合伙人',
       awards: '奖项',
@@ -190,6 +192,7 @@ const categoryLabelMap = {
   architecture: { en: 'Architecture', zh: '建筑' },
   interior: { en: 'Interior', zh: '室内' },
   landscape: { en: 'Landscape', zh: '景观' },
+  show: { en: 'Show', zh: '秀场' },
   other: { en: 'Other', zh: '其他' },
 };
 

@@ -18,6 +18,7 @@ export function ProjectDetailPage() {
   const transitionTimersRef = useRef([]);
   const thumbnailsRef = useRef(null);
   const hideTimerRef = useRef(null);
+  const navBarRef = useRef(null);
   const images = project.gallery || [];
   const detailEntries = getProjectDetailEntries(project, lang);
   const FADE_OUT_MS = 180;
@@ -134,6 +135,20 @@ export function ProjectDetailPage() {
     }
   };
 
+  // 桌面端：鼠标移入底部触发区域
+  const handleTriggerMouseEnter = () => {
+    if (!isMobile) {
+      setShowThumbnails(true);
+    }
+  };
+
+  // 桌面端：鼠标离开整个导航栏区域
+  const handleNavBarMouseLeave = () => {
+    if (!isMobile) {
+      setShowThumbnails(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
@@ -171,26 +186,38 @@ export function ProjectDetailPage() {
           </>
         )}
 
-        {/* 缩略图导航栏容器 - 底部悬停区域和缩略图一起 */}
+        {/* 底部触发区域和导航栏容器 */}
         {images.length > 1 && (
           <div 
+            ref={navBarRef}
             className="absolute bottom-0 left-0 right-0 z-20"
-            onMouseEnter={!isMobile ? () => setShowThumbnails(true) : undefined}
-            onMouseLeave={!isMobile ? () => setShowThumbnails(false) : undefined}
-            onTouchStart={isMobile ? () => setShowThumbnails(true) : undefined}
+            onMouseLeave={handleNavBarMouseLeave}
           >
-            {/* 底部 1/3 透明触发区域 - 仅在缩略图隐藏时有效 */}
-            {!showThumbnails && (
-              <div className="h-[33vh] w-full" />
+            {/* 底部 1/3 触发条 - 仅在桌面端且导航栏隐藏时 */}
+            {!showThumbnails && !isMobile && (
+              <div 
+                className="h-[33vh] w-full"
+                onMouseEnter={handleTriggerMouseEnter}
+              />
             )}
 
-            {/* 缩略图导航栏 - 使用 mask 实现两端渐隐 */}
+            {/* 移动端：轻触底部触发 */}
+            {!showThumbnails && isMobile && (
+              <div 
+                className="h-[33vh] w-full"
+                onTouchStart={() => setShowThumbnails(true)}
+              />
+            )}
+
+            {/* 缩略图导航栏 */}
             <div 
               className={`transition-all duration-300 ease-out ${
-                showThumbnails ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full pointer-events-none'
+                showThumbnails 
+                  ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                  : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
             >
-              {/* 渐变遮罩背景 - 固定高度，不撑开 */}
+              {/* 渐变遮罩背景 - 使用 mask 实现两端渐隐 */}
               <div 
                 className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-12 pb-4"
                 style={{

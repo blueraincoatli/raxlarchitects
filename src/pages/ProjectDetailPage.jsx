@@ -14,12 +14,25 @@ export function ProjectDetailPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
   const [showThumbnails, setShowThumbnails] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const transitionTimersRef = useRef([]);
   const thumbnailsRef = useRef(null);
+  const hideTimerRef = useRef(null);
   const images = project.gallery || [];
   const detailEntries = getProjectDetailEntries(project, lang);
   const FADE_OUT_MS = 180;
   const FADE_TOTAL_MS = 420;
+  const MOBILE_HIDE_DELAY = 400;
+
+  // 检测是否为移动端
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
@@ -74,6 +87,9 @@ export function ProjectDetailPage() {
   useEffect(() => {
     return () => {
       clearTransitionTimers();
+      if (hideTimerRef.current) {
+        window.clearTimeout(hideTimerRef.current);
+      }
     };
   }, [clearTransitionTimers]);
 
@@ -106,17 +122,31 @@ export function ProjectDetailPage() {
   // 点击缩略图切换图片
   const handleThumbnailClick = (index) => {
     changeImageWithTransition(index);
+    
+    // 移动端：点击后延迟自动隐藏导航栏
+    if (isMobile && hideTimerRef.current) {
+      window.clearTimeout(hideTimerRef.current);
+    }
+    if (isMobile) {
+      hideTimerRef.current = window.setTimeout(() => {
+        setShowThumbnails(false);
+      }, MOBILE_HIDE_DELAY);
+    }
+  };
+
+  // 处理底部区域的鼠标事件
+  const handleBottomMouseEnter = () => {
+    setShowThumbnails(true);
+  };
+
+  const handleBottomMouseLeave = () => {
+    setShowThumbnails(false);
   };
 
   return (
     <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
-      <div 
-        className="relative w-full bg-black overflow-hidden md:h-screen"
-        onMouseEnter={() => setShowThumbnails(true)}
-        onMouseLeave={() => setShowThumbnails(false)}
-        onTouchStart={() => setShowThumbnails(true)}
-      >
+      <div className="relative w-full bg-black overflow-hidden md:h-screen">
         <PictureImage
           imagePath={images[currentImageIndex]}
           alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
@@ -150,44 +180,62 @@ export function ProjectDetailPage() {
           </>
         )}
 
-        {/* 缩略图导航栏 - 叠在大图底部 */}
+        {/* 底部 1/3 悬停/触摸区域 */}
         {images.length > 1 && (
           <div 
-            className={`absolute bottom-0 left-0 right-0 z-20 transition-all duration-300 ease-out ${
+            className="absolute bottom-0 left-0 right-0 h-1/3 z-30"
+            onMouseEnter={!isMobile ? handleBottomMouseEnter : undefined}
+            onMouseLeave={!isMobile ? handleBottomMouseLeave : undefined}
+            onTouchStart={isMobile ? () => setShowThumbnails(true) : undefined}
+          />
+        )}
+
+        {/* 缩略图导航栏 - 叠在大图底部，居中显示 */}
+        {images.length > 1 && (
+          <div 
+            className={`absolute bottom-0 left-0 right-0 z-20 transition-all duration-300 ease-out pointer-events-none ${
               showThumbnails ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
             }`}
           >
             {/* 渐变遮罩背景 */}
-            <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-12 pb-4">
-              {/* 缩略图容器 */}
-              <div 
-                ref={thumbnailsRef}
-                className="flex gap-2 px-4 overflow-x-auto scrollbar-hide pb-2"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-              >
-                {images.map((imagePath, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleThumbnailClick(index)}
-                    className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
-                      index === currentImageIndex 
-                        ? 'ring-2 ring-white scale-105' 
-                        : 'opacity-60 hover:opacity-90'
-                    }`}
-                    style={{ width: '80px', height: '60px' }}
-                  >
-                    <img
-                      src={`${imagePath}.jpg`}
-                      alt={`Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </button>
-                ))}
+            <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-4">
+              {/* 居中的缩略图容器，两端渐隐 */}
+              <div className="relative mx-auto max-w-4xl px-12">
+                {/* 左侧渐隐遮罩 */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black/90 to-transparent z-10 pointer-events-none" />
+                {/* 右侧渐隐遮罩 */}
+                <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black/90 to-transparent z-10 pointer-events-none" />
+                
+                {/* 缩略图滚动容器 */}
+                <div 
+                  ref={thumbnailsRef}
+                  className="flex gap-3 overflow-x-auto scrollbar-hide py-2 px-4 pointer-events-auto"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {images.map((imagePath, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleThumbnailClick(index)}
+                      className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
+                        index === currentImageIndex 
+                          ? 'ring-2 ring-white ring-offset-2 ring-offset-black/50 scale-105' 
+                          : 'opacity-60 hover:opacity-90'
+                      }`}
+                      style={{ width: '80px', height: '60px' }}
+                    >
+                      <img
+                        src={`${imagePath}.jpg`}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        loading="lazy"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
               
               {/* 图片计数器 */}
-              <div className="text-center mt-2">
+              <div className="text-center mt-3">
                 <span className="text-white/70 text-sm">
                   {currentImageIndex + 1} / {images.length}
                 </span>
@@ -196,7 +244,7 @@ export function ProjectDetailPage() {
           </div>
         )}
 
-        {/* 底部提示条 - 当缩略图隐藏时显示一个小指示器 */}
+        {/* 底部提示条 - 当缩略图隐藏时显示 */}
         {images.length > 1 && !showThumbnails && (
           <div className="absolute bottom-0 left-0 right-0 z-10">
             {/* 进度点指示器 */}

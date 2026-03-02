@@ -142,8 +142,8 @@ export function ProjectDetailPage() {
     }
   };
 
-  // 桌面端：鼠标离开整个导航栏区域
-  const handleNavBarMouseLeave = () => {
+  // 桌面端：鼠标离开缩略图导航栏区域
+  const handleThumbnailsMouseLeave = () => {
     if (!isMobile) {
       setShowThumbnails(false);
     }
@@ -188,34 +188,32 @@ export function ProjectDetailPage() {
 
         {/* 底部触发区域和导航栏容器 */}
         {images.length > 1 && (
-          <div 
+          <div
             ref={navBarRef}
             className="absolute bottom-0 left-0 right-0 z-20"
-            onMouseLeave={handleNavBarMouseLeave}
+            onMouseEnter={() => {
+              if (!isMobile) setShowThumbnails(true);
+            }}
+            onMouseLeave={() => {
+              if (!isMobile && showThumbnails) setShowThumbnails(false);
+            }}
           >
-            {/* 底部 1/3 触发条 - 仅在桌面端且导航栏隐藏时 */}
-            {!showThumbnails && !isMobile && (
-              <div 
-                className="h-[33vh] w-full"
-                onMouseEnter={handleTriggerMouseEnter}
-              />
-            )}
-
             {/* 移动端：轻触底部触发 */}
             {!showThumbnails && isMobile && (
-              <div 
+              <div
                 className="h-[33vh] w-full"
                 onTouchStart={() => setShowThumbnails(true)}
               />
             )}
 
-            {/* 缩略图导航栏 */}
-            <div 
-              className={`transition-all duration-300 ease-out ${
-                showThumbnails 
-                  ? 'opacity-100 translate-y-0 pointer-events-auto' 
+            {/* 缩略图导航栏 - 只对 transform 做过渡，避免 opacity 过渡干扰鼠标事件 */}
+            <div
+              className={`duration-300 ease-out ${
+                showThumbnails
+                  ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-4 pointer-events-none'
               }`}
+              style={{ transition: showThumbnails ? 'transform 300ms ease-out' : 'opacity 150ms ease-out, transform 300ms ease-out' }}
             >
               {/* 渐变遮罩背景 - 使用 mask 实现两端渐隐 */}
               <div 

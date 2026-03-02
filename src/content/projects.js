@@ -299,25 +299,42 @@ export const projects = [
     grossFloorArea: '65,000 m²',
     status: 'finalized',
     statusLabel: '已建成',
-    category: 'other',
-    categoryLabel: '其他',
+    category: 'show',
+    categoryLabel: '秀场',
     imagePath: '/images/projects/11-content show',
-    // 视频配置 - 替换为真实的 Cloudflare Stream 信息
-    // videos: [
-    //   {
-    //     videoId: 'YOUR_VIDEO_UID_1',      // Cloudflare Stream Video UID
-    //     customerCode: 'YOUR_CUSTOMER_CODE', // 从 iframe URL 获取
-    //     title: '视频标题 1',
-    //     thumbnail: '/images/projects/11-content show', // 使用原封面作为缩略图
-    //   },
-    //   // 如果有更多视频，继续添加
-    //   // {
-    //   //   videoId: 'YOUR_VIDEO_UID_2',
-    //   //   customerCode: 'YOUR_CUSTOMER_CODE',
-    //   //   title: '视频标题 2',
-    //   //   thumbnail: '/images/projects/11-content show',
-    //   // },
-    // ],
+    // 5个秀场视频（2009-2016），按年份从新到旧排列
+    videos: [
+      {
+        videoId: '327692a29a92e389049f71ed6230e6d2',
+        customerCode: 'vi3l2h3rpgipaodm',
+        title: 'Content Show 2016',
+        thumbnail: '/images/projects/content-show/showVideoCover01',
+      },
+      {
+        videoId: 'fe071957cbbb50eb0314b1147d5bc223',
+        customerCode: 'vi3l2h3rpgipaodm',
+        title: 'Content Show 2014',
+        thumbnail: '/images/projects/content-show/showVideoCover02',
+      },
+      {
+        videoId: 'db094d62df6790c05dc08069dde73673',
+        customerCode: 'vi3l2h3rpgipaodm',
+        title: 'Content Show 2013',
+        thumbnail: '/images/projects/content-show/showVideoCover03',
+      },
+      {
+        videoId: 'a8c0a8703a7dfc6ddf27b498ab4f5dae',
+        customerCode: 'vi3l2h3rpgipaodm',
+        title: 'Content Show 2011',
+        thumbnail: '/images/projects/content-show/showVideoCover04',
+      },
+      {
+        videoId: 'dc28c93e5c07da9a8fafa1e733373cab',
+        customerCode: 'vi3l2h3rpgipaodm',
+        title: 'Body on Body 2009',
+        thumbnail: '/images/projects/content-show/showVideoCover05',
+      },
+    ],
     gallery: [
       '/images/projects/content-show/01-content-show',
       '/images/projects/content-show/02-content-show',
@@ -329,114 +346,4 @@ export const projects = [
     description: '黄浦江沿岸生态廊道规划项目，以生态修复和公众可达性为核心目标。设计构建连续的步行系统和多层次生境系统，提升城市滨水空间品质。',
   },
   // Show 项目 - 秀场视频（2009-2016）
-  {
-    id: 'show-01',
-    name: 'Content Show 2016',
-    location: '上海 · 中国',
-    client: 'Content Show',
-    year: '2016',
-    grossFloorArea: '3,000 m²',
-    status: 'finalized',
-    statusLabel: '已建成',
-    category: 'show',
-    categoryLabel: '秀场',
-    imagePath: '/images/projects/content-show/show-01',
-    videos: [
-      {
-        videoId: '327692a29a92e389049f71ed6230e6d2',
-        customerCode: 'vi3l2h3rpgipaodm',
-        title: 'Content Show 2016',
-        thumbnail: '/images/projects/content-show/show-01',
-      },
-    ],
-    description: '2016年大型时装发布秀场，汇集前沿设计理念与创新技术应用，呈现年度最具影响力的时尚盛典。',
-  },
-  {
-    id: 'show-02',
-    name: 'Content Show 2014',
-    location: '上海 · 中国',
-    client: 'Content Show',
-    year: '2014',
-    grossFloorArea: '2,000 m²',
-    status: 'finalized',
-    statusLabel: '已建成',
-    category: 'show',
-    categoryLabel: '秀场',
-    imagePath: '/images/projects/content-show/show-02',
-    videos: [
-      {
-        videoId: 'fe071957cbbb50eb0314b1147d5bc223',
-        customerCode: 'vi3l2h3rpgipaodm',
-        title: 'Content Show 2014',
-        thumbnail: '/images/projects/content-show/show-02',
-      },
-    ],
-    description: '2014年品牌发布秀场，以实验性空间设计探索时尚与建筑的边界。',
-  },
-  {
-    id: 'show-03',
-    name: 'Content Show 2013',
-    location: '上海 · 中国',
-    client: 'Content Show',
-    year: '2013',
-    grossFloorArea: '2,500 m²',
-    status: 'finalized',
-    statusLabel: '已建成',
-    category: 'show',
-    categoryLabel: '秀场',
-    imagePath: '/images/projects/content-show/show-03',
-    videos: [
-      {
-        videoId: 'db094d62df6790c05dc08069dde73673',
-        customerCode: 'vi3l2h3rpgipaodm',
-        title: 'Content Show 2013',
-        thumbnail: '/images/projects/content-show/show-03',
-      },
-    ],
-    description: '2013年时尚发布秀场，融合当代艺术与建筑空间，打造沉浸式观秀体验。',
-  },
-  {
-    id: 'show-04',
-    name: 'Content Show 2011',
-    location: '上海 · 中国',
-    client: 'Content Show',
-    year: '2011',
-    grossFloorArea: '2,000 m²',
-    status: 'finalized',
-    statusLabel: '已建成',
-    category: 'show',
-    categoryLabel: '秀场',
-    imagePath: '/images/projects/content-show/show-04',
-    videos: [
-      {
-        videoId: 'a8c0a8703a7dfc6ddf27b498ab4f5dae',
-        customerCode: 'vi3l2h3rpgipaodm',
-        title: 'Content Show 2011',
-        thumbnail: '/images/projects/content-show/show-04',
-      },
-    ],
-    description: '2011年品牌时装发布秀场，以极简空间设计呈现服装的纯粹美学。',
-  },
-  {
-    id: 'show-05',
-    name: 'Body on Body',
-    location: '上海 · 中国',
-    client: 'Content Show',
-    year: '2009',
-    grossFloorArea: '2,000 m²',
-    status: 'finalized',
-    statusLabel: '已建成',
-    category: 'show',
-    categoryLabel: '秀场',
-    imagePath: '/images/projects/content-show/show-05',
-    videos: [
-      {
-        videoId: 'dc28c93e5c07da9a8fafa1e733373cab',
-        customerCode: 'vi3l2h3rpgipaodm',
-        title: 'Body on Body - 2009',
-        thumbnail: '/images/projects/content-show/show-05',
-      },
-    ],
-    description: '2009年时装秀场，探索身体与服装之间的空间关系，呈现前卫的实验性时尚表达。',
-  },
 ];

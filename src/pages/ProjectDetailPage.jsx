@@ -13,7 +13,9 @@ export function ProjectDetailPage() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isImageTransitioning, setIsImageTransitioning] = useState(false);
+  const [showThumbnails, setShowThumbnails] = useState(false);
   const transitionTimersRef = useRef([]);
+  const thumbnailsRef = useRef(null);
   const images = project.gallery || [];
   const detailEntries = getProjectDetailEntries(project, lang);
   const FADE_OUT_MS = 180;
@@ -23,23 +25,33 @@ export function ProjectDetailPage() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [id]);
 
+  // 当图片切换时，自动滚动缩略图到可见区域
+  useEffect(() => {
+    if (thumbnailsRef.current && showThumbnails) {
+      const thumbnailElements = thumbnailsRef.current.children;
+      if (thumbnailElements[currentImageIndex]) {
+        thumbnailElements[currentImageIndex].scrollIntoView({
+          behavior: 'smooth',
+          inline: 'center',
+          block: 'nearest'
+        });
+      }
+    }
+  }, [currentImageIndex, showThumbnails]);
+
   const clearTransitionTimers = useCallback(() => {
     transitionTimersRef.current.forEach((timerId) => window.clearTimeout(timerId));
     transitionTimersRef.current = [];
   }, []);
 
-  const changeImageWithTransition = useCallback((direction) => {
-    if (images.length <= 1 || isImageTransitioning) return;
+  const changeImageWithTransition = useCallback((newIndex) => {
+    if (images.length <= 1 || isImageTransitioning || newIndex === currentImageIndex) return;
 
     clearTransitionTimers();
     setIsImageTransitioning(true);
 
     const switchTimer = window.setTimeout(() => {
-      setCurrentImageIndex((prev) =>
-        direction === 'next'
-          ? (prev + 1) % images.length
-          : (prev - 1 + images.length) % images.length
-      );
+      setCurrentImageIndex(newIndex);
     }, FADE_OUT_MS);
 
     const finishTimer = window.setTimeout(() => {
@@ -47,15 +59,17 @@ export function ProjectDetailPage() {
     }, FADE_TOTAL_MS);
 
     transitionTimersRef.current.push(switchTimer, finishTimer);
-  }, [FADE_OUT_MS, FADE_TOTAL_MS, clearTransitionTimers, images.length, isImageTransitioning]);
+  }, [FADE_OUT_MS, FADE_TOTAL_MS, clearTransitionTimers, currentImageIndex, images.length, isImageTransitioning]);
 
   const nextImage = useCallback(() => {
-    changeImageWithTransition('next');
-  }, [changeImageWithTransition]);
+    const newIndex = (currentImageIndex + 1) % images.length;
+    changeImageWithTransition(newIndex);
+  }, [changeImageWithTransition, currentImageIndex, images.length]);
 
   const prevImage = useCallback(() => {
-    changeImageWithTransition('prev');
-  }, [changeImageWithTransition]);
+    const newIndex = (currentImageIndex - 1 + images.length) % images.length;
+    changeImageWithTransition(newIndex);
+  }, [changeImageWithTransition, currentImageIndex, images.length]);
 
   useEffect(() => {
     return () => {
@@ -89,10 +103,20 @@ export function ProjectDetailPage() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [images.length, nextImage, prevImage]);
 
+  // 点击缩略图切换图片
+  const handleThumbnailClick = (index) => {
+    changeImageWithTransition(index);
+  };
+
   return (
     <div className="min-h-screen bg-[#181818]">
       {/* 主图片区域 - 撑满页面高度 */}
-      <div className="relative w-full bg-black overflow-hidden md:h-screen">
+      <div 
+        className="relative w-full bg-black overflow-hidden md:h-screen"
+        onMouseEnter={() => setShowThumbnails(true)}
+        onMouseLeave={() => setShowThumbnails(false)}
+        onTouchStart={() => setShowThumbnails(true)}
+      >
         <PictureImage
           imagePath={images[currentImageIndex]}
           alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
@@ -124,6 +148,88 @@ export function ProjectDetailPage() {
               &rarr;
             </button>
           </>
+        )}
+
+        {/* 缩略图导航栏 - 叠在大图底部 */}
+        {images.length > 1 && (
+          <div 
+            className={`absolute bottom-0 left-0 right-0 z-20 transition-all duration-300 ease-out ${
+              showThumbnails ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+            }`}
+          >
+            {/* 渐变遮罩背景 */}
+            <div className="bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-12 pb-4">
+              {/* 缩略图容器 */}
+              <div 
+                ref={thumbnailsRef}
+                className="flex gap-2 px-4 overflow-x-auto scrollbar-hide pb-2"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {images.map((imagePath, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleThumbnailClick(index)}
+                    className={`flex-shrink-0 relative overflow-hidden rounded transition-all duration-200 ${
+                      index === currentImageIndex 
+                        ? 'ring-2 ring-white scale-105' 
+                        : 'opacity-60 hover:opacity-90'
+                    }`}
+                    style={{ width: '80px', height: '60px' }}
+                  >
+                    <img
+                      src={`${imagePath}.jpg`}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </button>
+                ))}
+              </div>
+              
+              {/* 图片计数器 */}
+              <div className="text-center mt-2">
+                <span className="text-white/70 text-sm">
+                  {currentImageIndex + 1} / {images.length}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 底部提示条 - 当缩略图隐藏时显示一个小指示器 */}
+        {images.length > 1 && !showThumbnails && (
+          <div className="absolute bottom-0 left-0 right-0 z-10">
+            {/* 进度点指示器 */}
+            <div className="flex justify-center gap-1.5 pb-4">
+              {images.length <= 12 ? (
+                // 图片较少时显示所有点
+                images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleThumbnailClick(index)}
+                    className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                      index === currentImageIndex 
+                        ? 'bg-white w-4' 
+                        : 'bg-white/40 hover:bg-white/60'
+                    }`}
+                  />
+                ))
+              ) : (
+                // 图片较多时显示简化指示器
+                <div className="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full">
+                  <span className="text-white/80 text-xs">
+                    {currentImageIndex + 1} / {images.length}
+                  </span>
+                  <div className="w-16 h-1 bg-white/20 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-white/80 transition-all duration-300"
+                      style={{ width: `${((currentImageIndex + 1) / images.length) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </div>
 
@@ -162,5 +268,3 @@ export function ProjectDetailPage() {
 }
 
 export default ProjectDetailPage;
-
-

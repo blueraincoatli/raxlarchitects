@@ -308,13 +308,13 @@ export const projects = [
         videoId: '327692a29a92e389049f71ed6230e6d2',
         customerCode: 'vi3l2h3rpgipaodm',
         title: 'Content Show 2016',
-        thumbnail: '/images/projects/content-show/showVideoCover01',
+        thumbnail: '/images/projects/content-show/showVideoCover05',
       },
       {
         videoId: 'fe071957cbbb50eb0314b1147d5bc223',
         customerCode: 'vi3l2h3rpgipaodm',
         title: 'Content Show 2014',
-        thumbnail: '/images/projects/content-show/showVideoCover02',
+        thumbnail: '/images/projects/content-show/showVideoCover04',
       },
       {
         videoId: 'db094d62df6790c05dc08069dde73673',
@@ -326,13 +326,13 @@ export const projects = [
         videoId: 'a8c0a8703a7dfc6ddf27b498ab4f5dae',
         customerCode: 'vi3l2h3rpgipaodm',
         title: 'Content Show 2011',
-        thumbnail: '/images/projects/content-show/showVideoCover04',
+        thumbnail: '/images/projects/content-show/showVideoCover02',
       },
       {
         videoId: 'dc28c93e5c07da9a8fafa1e733373cab',
         customerCode: 'vi3l2h3rpgipaodm',
         title: 'Body on Body 2009',
-        thumbnail: '/images/projects/content-show/showVideoCover05',
+        thumbnail: '/images/projects/content-show/showVideoCover01',
       },
     ],
     gallery: [

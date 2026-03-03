@@ -51,13 +51,22 @@ export function ProjectDetailPage() {
   const videos = project.videos || [];
   const detailEntries = getProjectDetailEntries(project, lang);
   
+  // Helper to get thumbnail path from full image path
+  const getThumbPath = (fullPath) => {
+    // /images/projects/one-park-gubei/01-one-park-gubei -> /images/projects/one-park-gubei/thumb-01-one-park-gubei
+    const parts = fullPath.split('/');
+    const filename = parts[parts.length - 1];
+    parts[parts.length - 1] = 'thumb-' + filename;
+    return parts.join('/');
+  };
+  
   // Check if this is a video project
   const hasVideos = videos.length > 0;
   const hasImages = images.length > 0;
   // For mixed projects, show videos first then images
   const displayItems = hasVideos 
-    ? [...videos.map(v => ({ ...v, type: 'video' })), ...images.map(i => ({ path: i, type: 'image' }))]
-    : images.map(i => ({ path: i, type: 'image' }));
+    ? [...videos.map(v => ({ ...v, type: 'video' })), ...images.map(i => ({ path: i, thumbPath: getThumbPath(i), type: 'image' }))]
+    : images.map(i => ({ path: i, thumbPath: getThumbPath(i), type: 'image' }));
   const currentItem = displayItems[currentImageIndex] || null;
   const FADE_OUT_MS = 180;
   const FADE_TOTAL_MS = 420;
@@ -330,10 +339,10 @@ export function ProjectDetailPage() {
                           </>
                         ) : (
                           <picture>
-                            <source srcSet={`${item.path || item}.avif`} type="image/avif" />
-                            <source srcSet={`${item.path || item}.webp`} type="image/webp" />
+                            <source srcSet={`${item.thumbPath}.avif`} type="image/avif" />
+                            <source srcSet={`${item.thumbPath}.webp`} type="image/webp" />
                             <img
-                              src={`${item.path || item}.jpg`}
+                              src={`${item.thumbPath}.jpg`}
                               alt={`Thumbnail ${index + 1}`}
                               className="w-full h-full object-cover pointer-events-none"
                               loading="lazy"

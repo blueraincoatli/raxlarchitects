@@ -90,7 +90,8 @@
       "Bash(magick identify:*)",
       "Bash(ffprobe:*)",
       "Bash(git fetch:*)",
-      "Bash(npm run check:*)"
+      "Bash(npm run check:*)",
+      "Bash(claude plugins:*)"
     ]
   }
 }

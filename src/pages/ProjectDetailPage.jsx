@@ -402,25 +402,27 @@ export function ProjectDetailPage() {
       <div className="relative z-10">
         <div className="max-w-4xl mx-auto px-8 py-12">
           <div className="space-y-3 text-white/85 leading-relaxed">
-            {detailEntries.map((entry, index) => (
-              <p key={`${project.id}-detail-${index}`}>
-                {entry.label ? (
-                  <>
-                    <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(entry.label, lang)}</span>
-                    <span className="text-white/75"> {' : '} </span>
-                    <span>{entry.value}</span>
-                  </>
-                ) : (
-                  entry.text
-                )}
-              </p>
-            ))}
+            {detailEntries
+              .filter((entry) => {
+                // 过滤掉"位置"条目（中英文）
+                if (!entry.label) return true;
+                const labelLower = entry.label.toLowerCase();
+                return labelLower !== '位置' && labelLower !== 'location' && labelLower !== '项目位置' && labelLower !== 'project location';
+              })
+              .map((entry, index) => (
+                <p key={`${project.id}-detail-${index}`}>
+                  {entry.label ? (
+                    <>
+                      <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(entry.label, lang)}</span>
+                      <span className="text-white/75"> {' : '} </span>
+                      <span>{entry.value}</span>
+                    </>
+                  ) : (
+                    entry.text
+                  )}
+                </p>
+              ))}
             <p className="pt-2 border-t border-white/10">
-              <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(t('detail.status'), lang)}</span>
-              <span className="text-white/75"> {' : '} </span>
-              <span className="text-white/85">{getStatusLabel(project.status, lang)}</span>
-            </p>
-            <p>
               <span className="font-semibold tracking-wide text-white uppercase">{formatDetailLabel(t('detail.category'), lang)}</span>
               <span className="text-white/75"> {' : '} </span>
               <span className="text-white/85">{getCategoryLabel(project.category, lang)}</span>

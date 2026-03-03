@@ -47,6 +47,22 @@ const messages = {
     'nav.projects': '作品',
     'nav.about': '关于',
     'nav.contact': '联系',
+    'nav.search': '搜索',
+    'nav.langToggle': '中/英',
+
+    // 导航子菜单
+    'nav.statusGroup': '状态',
+    'nav.categoryGroup': '分类',
+    'nav.finalized': '已建成',
+    'nav.underConstruction': '建设中',
+    'nav.proposed': '提案中',
+    'nav.architecture': '建筑',
+    'nav.interior': '室内',
+    'nav.landscape': '景观',
+    'nav.show': '秀场',
+    'nav.aboutUs': '关于我们',
+    'nav.partners': '团队',
+    'nav.awards': '荣誉',
 
     // 项目状态
     'status.finalized': '已建成',
@@ -75,6 +91,11 @@ const messages = {
     // 通用
     'common.loading': '加载中...',
     'common.close': '关闭',
+    'common.viewProject': '查看详情',
+    'common.searchProjects': '搜索项目',
+    'common.searchPlaceholder': '输入项目名称或位置...',
+    'common.searchHint': '输入关键词搜索项目',
+    'common.searchNoResults': '未找到匹配的项目',
   },
   en: {
     // Navigation
@@ -82,6 +103,22 @@ const messages = {
     'nav.projects': 'PROJECTS',
     'nav.about': 'ABOUT',
     'nav.contact': 'CONTACT',
+    'nav.search': 'SEARCH',
+    'nav.langToggle': 'EN/ZH',
+
+    // Nav Submenu
+    'nav.statusGroup': 'STATUS',
+    'nav.categoryGroup': 'CATEGORY',
+    'nav.finalized': 'FINALIZED',
+    'nav.underConstruction': 'UNDER CONSTRUCTION',
+    'nav.proposed': 'PROPOSED',
+    'nav.architecture': 'ARCHITECTURE',
+    'nav.interior': 'INTERIOR',
+    'nav.landscape': 'LANDSCAPE',
+    'nav.show': 'SHOW',
+    'nav.aboutUs': 'ABOUT US',
+    'nav.partners': 'PARTNERS',
+    'nav.awards': 'AWARDS',
 
     // Project Status
     'status.finalized': 'FINALIZED',
@@ -110,6 +147,11 @@ const messages = {
     // Common
     'common.loading': 'Loading...',
     'common.close': 'Close',
+    'common.viewProject': 'VIEW PROJECT',
+    'common.searchProjects': 'SEARCH PROJECTS',
+    'common.searchPlaceholder': 'Enter project name or location...',
+    'common.searchHint': 'Type keywords to search projects',
+    'common.searchNoResults': 'No matching projects found',
   },
 };
 

@@ -100,18 +100,9 @@ export function ProjectDetailPage() {
     if (images.length <= 1 || isImageTransitioning || newIndex === currentImageIndex) return;
 
     clearTransitionTimers();
-    setIsImageTransitioning(true);
-
-    const switchTimer = window.setTimeout(() => {
-      setCurrentImageIndex(newIndex);
-    }, FADE_OUT_MS);
-
-    const finishTimer = window.setTimeout(() => {
-      setIsImageTransitioning(false);
-    }, FADE_TOTAL_MS);
-
-    transitionTimersRef.current.push(switchTimer, finishTimer);
-  }, [FADE_OUT_MS, FADE_TOTAL_MS, clearTransitionTimers, currentImageIndex, images.length, isImageTransitioning]);
+    // Direct image switch without fade-to-black transition
+    setCurrentImageIndex(newIndex);
+  }, [clearTransitionTimers, currentImageIndex, images.length, isImageTransitioning]);
 
   const nextImage = useCallback(() => {
     const newIndex = (currentImageIndex + 1) % images.length;
@@ -192,9 +183,7 @@ export function ProjectDetailPage() {
       {/* 主图片/视频区域 - 撑满页面高度 */}
       <div className="relative w-full bg-black overflow-hidden md:h-screen">
         {currentItem?.type === 'video' ? (
-          <div className={`w-full h-full flex items-center justify-center pb-20 md:pb-0 transition-all duration-[420ms] ease-out will-change-transform ${
-            isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
-          }`}>
+          <div className="w-full h-full flex items-center justify-center pb-20 md:pb-0">
             <div className="w-full max-w-5xl mx-auto px-4 md:px-8">
               <StreamVideoPlayer
                 videoId={currentItem.videoId}
@@ -208,9 +197,7 @@ export function ProjectDetailPage() {
           <PictureImage
             imagePath={currentItem?.path || images[currentImageIndex]}
             alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
-            className={`block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto transition-all duration-[420ms] ease-out will-change-transform ${
-              isImageTransitioning ? 'opacity-0 scale-[1.01]' : 'opacity-100 scale-100'
-            }`}
+            className="block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto"
           />
         )}
 
@@ -239,6 +226,14 @@ export function ProjectDetailPage() {
           </>
         )}
 
+        {/* 移动端：点击图片区域切换缩略图导航栏 */}
+        {isMobile && displayItems.length > 1 && (
+          <div
+            className="absolute inset-0 z-10"
+            onClick={() => setShowThumbnails(prev => !prev)}
+          />
+        )}
+
         {/* 底部触发区域和导航栏容器 */}
         {displayItems.length > 1 && (
           <div
@@ -251,13 +246,7 @@ export function ProjectDetailPage() {
               if (!isMobile && showThumbnails) setShowThumbnails(false);
             }}
           >
-            {/* 移动端：轻触底部触发 */}
-            {!showThumbnails && isMobile && (
-              <div
-                className="h-[33vh] w-full"
-                onTouchStart={() => setShowThumbnails(true)}
-              />
-            )}
+            {/* 移动端点击区域已由上方div处理 */}
 
             {/* 缩略图导航栏 - 只对 transform 做过渡，避免 opacity 过渡干扰鼠标事件 */}
             <div
@@ -340,13 +329,17 @@ export function ProjectDetailPage() {
                             </div>
                           </>
                         ) : (
-                          <img
-                            src={`${item.path || item}.jpg`}
-                            alt={`Thumbnail ${index + 1}`}
-                            className="w-full h-full object-cover pointer-events-none"
-                            loading="lazy"
-                            draggable={false}
-                          />
+                          <picture>
+                            <source srcSet={`${item.path || item}.avif`} type="image/avif" />
+                            <source srcSet={`${item.path || item}.webp`} type="image/webp" />
+                            <img
+                              src={`${item.path || item}.jpg`}
+                              alt={`Thumbnail ${index + 1}`}
+                              className="w-full h-full object-cover pointer-events-none"
+                              loading="lazy"
+                              draggable={false}
+                            />
+                          </picture>
                         )}
                       </button>
                     ))}

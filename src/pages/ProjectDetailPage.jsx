@@ -222,13 +222,13 @@ export function ProjectDetailPage() {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 z-10 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
+              className="absolute left-4 top-1/2 z-20 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
             >
               &larr;
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 z-10 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
+              className="absolute right-4 top-1/2 z-20 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
             >
               &rarr;
             </button>

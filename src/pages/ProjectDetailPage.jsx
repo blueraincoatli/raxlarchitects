@@ -111,22 +111,22 @@ export function ProjectDetailPage() {
   }, []);
 
   const changeImageWithTransition = useCallback((newIndex) => {
-    if (images.length <= 1 || isImageTransitioning || newIndex === currentImageIndex) return;
+    if (displayItems.length <= 1 || isImageTransitioning || newIndex === currentImageIndex) return;
 
     clearTransitionTimers();
     // Direct image switch without fade-to-black transition
     setCurrentImageIndex(newIndex);
-  }, [clearTransitionTimers, currentImageIndex, images.length, isImageTransitioning]);
+  }, [clearTransitionTimers, currentImageIndex, displayItems.length, isImageTransitioning]);
 
   const nextImage = useCallback(() => {
-    const newIndex = (currentImageIndex + 1) % images.length;
+    const newIndex = (currentImageIndex + 1) % displayItems.length;
     changeImageWithTransition(newIndex);
-  }, [changeImageWithTransition, currentImageIndex, images.length]);
+  }, [changeImageWithTransition, currentImageIndex, displayItems.length]);
 
   const prevImage = useCallback(() => {
-    const newIndex = (currentImageIndex - 1 + images.length) % images.length;
+    const newIndex = (currentImageIndex - 1 + displayItems.length) % displayItems.length;
     changeImageWithTransition(newIndex);
-  }, [changeImageWithTransition, currentImageIndex, images.length]);
+  }, [changeImageWithTransition, currentImageIndex, displayItems.length]);
 
   useEffect(() => {
     return () => {
@@ -138,7 +138,7 @@ export function ProjectDetailPage() {
   }, [clearTransitionTimers]);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (displayItems.length <= 1) return;
 
     const onKeyDown = (event) => {
       const target = event.target;
@@ -161,7 +161,7 @@ export function ProjectDetailPage() {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [images.length, nextImage, prevImage]);
+  }, [displayItems.length, nextImage, prevImage]);
 
   // 点击缩略图切换图片
   const handleThumbnailClick = (index) => {
@@ -368,7 +368,7 @@ export function ProjectDetailPage() {
                   <div className="w-16 h-1 bg-white/20 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-white/80 transition-all duration-300"
-                      style={{ width: `${((currentImageIndex + 1) / images.length) * 100}%` }}
+                      style={{ width: `${((currentImageIndex + 1) / displayItems.length) * 100}%` }}
                     />
                   </div>
                 </div>

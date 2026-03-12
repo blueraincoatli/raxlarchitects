@@ -247,6 +247,9 @@ export function ProjectsPage() {
   const useFinalizedFeaturedLayout = status === 'finalized' && !category && cards.length >= 4;
   const secondHeroCard = useFinalizedFeaturedLayout ? cards[3] : null;
   const finalizedSmallCards = useFinalizedFeaturedLayout ? cards.slice(4) : [];
+  // 品尊国际、开云艾尚里用2列大图，后面3个用3列小图
+  const finalizedTwoColCards = finalizedSmallCards.slice(0, 2);
+  const finalizedThreeColCards = finalizedSmallCards.slice(2);
   const architectureLevels = category === 'architecture' ? classifyArchitectureCards(cards) : null;
 
   return (
@@ -421,10 +424,17 @@ export function ProjectsPage() {
                     <ProjectCard card={secondHeroCard} lang={lang} t={t} aspectRatio="aspect-[16/6]" />
                   </div>
                 )}
-                {finalizedSmallCards.length > 0 && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {finalizedSmallCards.map(card => (
+                {finalizedTwoColCards.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                    {finalizedTwoColCards.map(card => (
                       <ProjectCard key={card.key} card={card} lang={lang} t={t} aspectRatio="aspect-[16/9]" />
+                    ))}
+                  </div>
+                )}
+                {finalizedThreeColCards.length > 0 && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {finalizedThreeColCards.map(card => (
+                      <ProjectCard key={card.key} card={card} lang={lang} t={t} aspectRatio="aspect-[16/10]" />
                     ))}
                   </div>
                 )}

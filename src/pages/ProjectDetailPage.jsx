@@ -4,6 +4,17 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import PictureImage from '../components/PictureImage';
 import { formatDetailLabel, getCategoryLabel, getProjectDetailEntries, getProjectLocation, getProjectName, getStatusLabel, useLanguage } from '../i18n.jsx';
 
+function getThumbnailPath(imagePath) {
+  if (!imagePath) return '';
+
+  const normalizedPath = imagePath.replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+  const lastSlashIndex = normalizedPath.lastIndexOf('/');
+  const directory = lastSlashIndex >= 0 ? normalizedPath.slice(0, lastSlashIndex + 1) : '';
+  const fileName = lastSlashIndex >= 0 ? normalizedPath.slice(lastSlashIndex + 1) : normalizedPath;
+
+  return `${directory}${fileName.startsWith('thumb-') ? fileName : `thumb-${fileName}`}`;
+}
+
 // Cloudflare Stream Video Player Component
 function StreamVideoPlayer({ videoId, customerCode, title, thumbnailPath }) {
   // controls=true 显示默认控件：播放/暂停、进度条、音量、全屏
@@ -56,22 +67,13 @@ export function ProjectDetailPage() {
   const videos = project.videos || [];
   const detailEntries = getProjectDetailEntries(project, lang);
 
-  // Helper to get thumbnail path from full image path
-  const getThumbPath = (fullPath) => {
-    // /images/projects/one-park-gubei/01-one-park-gubei -> /images/projects/one-park-gubei/thumb-01-one-park-gubei
-    const parts = fullPath.split('/');
-    const filename = parts[parts.length - 1];
-    parts[parts.length - 1] = 'thumb-' + filename;
-    return parts.join('/');
-  };
-
   // Check if this is a video project
   const hasVideos = videos.length > 0;
   const hasImages = allImages.length > 0;
   // For mixed projects, show videos first then images
   const displayItems = hasVideos
-    ? [...videos.map(v => ({ ...v, type: 'video' })), ...allImages.map(item => ({ ...item, thumbPath: getThumbPath(item.path), type: 'image' }))]
-    : allImages.map(item => ({ ...item, thumbPath: getThumbPath(item.path), type: 'image' }));
+    ? [...videos.map(v => ({ ...v, type: 'video' })), ...allImages.map(item => ({ ...item, type: 'image' }))]
+    : allImages.map(item => ({ ...item, type: 'image' }));
   const currentItem = displayItems[currentImageIndex] || null;
   const FADE_OUT_MS = 180;
   const FADE_TOTAL_MS = 420;
@@ -209,7 +211,7 @@ export function ProjectDetailPage() {
           </div>
         ) : (
           <PictureImage
-            imagePath={currentItem?.path || images[currentImageIndex]}
+            imagePath={currentItem?.path || ''}
             alt={`${getProjectName(project, lang)} - Image ${currentImageIndex + 1}`}
             className="block w-full h-auto object-contain md:h-screen md:w-auto md:max-w-none md:mx-auto"
           />
@@ -245,7 +247,7 @@ export function ProjectDetailPage() {
           <button
             type="button"
             aria-label={showThumbnails ? '收起缩略图导航栏' : '展开缩略图导航栏'}
-            className="absolute bottom-0 left-16 right-16 z-30 h-14 bg-transparent md:hidden"
+            className="absolute bottom-0 left-16 right-16 z-30 h-14 bg-transparent"
             onClick={() => setShowThumbnails(prev => !prev)}
           />
         )}
@@ -328,13 +330,23 @@ export function ProjectDetailPage() {
                       >
                         {item.type === 'video' ? (
                           <>
-                            <img
-                              src={item.thumbnail ? `${item.thumbnail}.jpg` : '/images/video-placeholder.jpg'}
-                              alt={`Video ${index + 1}`}
-                              className="w-full h-full object-cover pointer-events-none"
-                              loading="lazy"
-                              draggable={false}
-                            />
+                            {item.thumbnail ? (
+                              <PictureImage
+                                imagePath={getThumbnailPath(item.thumbnail)}
+                                alt={`Video ${index + 1}`}
+                                className="w-full h-full object-cover pointer-events-none"
+                                loading="lazy"
+                                draggable={false}
+                              />
+                            ) : (
+                              <img
+                                src="/images/video-placeholder.jpg"
+                                alt={`Video ${index + 1}`}
+                                className="w-full h-full object-cover pointer-events-none"
+                                loading="lazy"
+                                draggable={false}
+                              />
+                            )}
                             {/* Video play icon overlay */}
                             <div className="absolute inset-0 flex items-center justify-center bg-black/30">
                               <div className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center">
@@ -345,17 +357,13 @@ export function ProjectDetailPage() {
                             </div>
                           </>
                         ) : (
-                          <picture>
-                            <source srcSet={`${item.thumbPath}.avif`} type="image/avif" />
-                            <source srcSet={`${item.thumbPath}.webp`} type="image/webp" />
-                            <img
-                              src={`${item.thumbPath}.jpg`}
-                              alt={`Thumbnail ${index + 1}`}
-                              className="w-full h-full object-cover pointer-events-none"
-                              loading="lazy"
-                              draggable={false}
-                            />
-                          </picture>
+                          <PictureImage
+                            imagePath={getThumbnailPath(item.path)}
+                            alt={`Thumbnail ${index + 1}`}
+                            className="w-full h-full object-cover pointer-events-none"
+                            loading="lazy"
+                            draggable={false}
+                          />
                         )}
                       </button>
                     ))}

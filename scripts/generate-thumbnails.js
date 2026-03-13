@@ -47,7 +47,7 @@ async function processDirectory(dir) {
 }
 
 async function generateThumbnail(sourcePath, targetBase) {
-  const filter = 'scale=' + THUMB_WIDTH + ':' + THUMB_HEIGHT + ':force_original_aspect_ratio=decrease,pad=' + THUMB_WIDTH + ':' + THUMB_HEIGHT + ':(ow-iw)/2:(oh-ih)/2:black';
+  const filter = 'scale=' + THUMB_WIDTH + ':' + THUMB_HEIGHT + ':force_original_aspect_ratio=increase,crop=' + THUMB_WIDTH + ':' + THUMB_HEIGHT;
   
   // AVIF
   if (!fs.existsSync(targetBase + '.avif')) {

@@ -227,23 +227,25 @@ export function ProjectDetailPage() {
           <>
             <button
               onClick={prevImage}
-              className="absolute left-4 top-1/2 z-20 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
+              className="absolute left-4 top-1/2 z-30 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
             >
               &larr;
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-4 top-1/2 z-20 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
+              className="absolute right-4 top-1/2 z-30 w-12 h-12 rounded bg-black/50 hover:bg-white/30 text-white flex items-center justify-center transition-colors text-sm"
             >
               &rarr;
             </button>
           </>
         )}
 
-        {/* 移动端：点击图片区域切换缩略图导航栏 */}
+        {/* 移动端：底部透明触发带，用于展开/收起缩略图导航栏 */}
         {isMobile && displayItems.length > 1 && (
-          <div
-            className="absolute inset-0 z-10"
+          <button
+            type="button"
+            aria-label={showThumbnails ? '收起缩略图导航栏' : '展开缩略图导航栏'}
+            className="absolute bottom-0 left-16 right-16 z-30 h-14 bg-transparent md:hidden"
             onClick={() => setShowThumbnails(prev => !prev)}
           />
         )}
@@ -260,7 +262,7 @@ export function ProjectDetailPage() {
               if (!isMobile && showThumbnails) setShowThumbnails(false);
             }}
           >
-            {/* 移动端点击区域已由上方div处理 */}
+            {/* 移动端展开/收起由底部透明触发带处理 */}
 
             {/* 缩略图导航栏 - 只对 transform 做过渡，避免 opacity 过渡干扰鼠标事件 */}
             <div

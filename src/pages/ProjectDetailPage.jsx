@@ -271,31 +271,58 @@ export function ProjectDetailPage() {
               }`}
               style={{ transition: showThumbnails ? 'transform 300ms ease-out' : 'opacity 150ms ease-out, transform 300ms ease-out' }}
             >
-              {/* 渐变遮罩背景 */}
+              {/* 渐变遮罩背景 - 使用 mask 实现两端渐隐 */}
               <div
-                className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-8 pb-4"
+                className="bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-12 pb-4"
+                style={{
+                  maskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)',
+                  WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)'
+                }}
               >
-                {/* 居中的缩略图容器 - 2列网格布局 */}
-                <div className="mx-auto max-w-2xl px-4">
-                  {/* 缩略图网格容器 - 可垂直滚动 */}
+                {/* 居中的缩略图容器 */}
+                <div className="mx-auto max-w-4xl px-8">
+                  {/* 缩略图横向滚动容器 - 支持拖拽 */}
                   <div
                     ref={thumbnailsRef}
-                    className="grid grid-cols-2 gap-3 overflow-y-auto py-2 px-2 max-h-48"
+                    className="flex gap-3 overflow-x-auto cursor-grab active:cursor-grabbing py-2 px-4"
                     style={{
-                      scrollbarWidth: 'thin',
-                      scrollbarColor: 'rgba(255,255,255,0.3) transparent'
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none',
+                      WebkitOverflowScrolling: 'touch'
+                    }}
+                    onMouseDown={(e) => {
+                      const ele = e.currentTarget;
+                      ele.style.cursor = 'grabbing';
+                      const startX = e.pageX - ele.offsetLeft;
+                      const scrollLeft = ele.scrollLeft;
+
+                      const onMouseMove = (moveEvent) => {
+                        moveEvent.preventDefault();
+                        const x = moveEvent.pageX - ele.offsetLeft;
+                        const walk = (x - startX) * 1.5;
+                        ele.scrollLeft = scrollLeft - walk;
+                      };
+
+                      const onMouseUp = () => {
+                        ele.style.cursor = 'grab';
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                      };
+
+                      document.addEventListener('mousemove', onMouseMove);
+                      document.addEventListener('mouseup', onMouseUp);
                     }}
                   >
                     {displayItems.map((item, index) => (
                       <button
                         key={index}
                         onClick={() => handleThumbnailClick(index)}
-                        className={`relative overflow-hidden transition-all duration-200 ${
+                        className={`flex-shrink-0 relative overflow-hidden transition-all duration-200 ${
                           index === currentImageIndex
-                            ? 'ring-2 ring-white ring-offset-2 ring-offset-black/60 scale-[1.02]'
+                            ? 'ring-2 ring-white ring-offset-2 ring-offset-black/60 scale-105'
                             : 'opacity-70 hover:opacity-100'
                         }`}
-                        style={{ aspectRatio: '4/3' }}
+                        style={{ width: '80px', height: '60px' }}
                       >
                         {item.type === 'video' ? (
                           <>
@@ -308,8 +335,8 @@ export function ProjectDetailPage() {
                             />
                             {/* Video play icon overlay */}
                             <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                              <div className="w-8 h-8 rounded-full bg-white/90 flex items-center justify-center">
-                                <svg className="w-4 h-4 text-black ml-0.5" fill="currentColor" viewBox="0 0 20 20">
+                              <div className="w-6 h-6 rounded-full bg-white/90 flex items-center justify-center">
+                                <svg className="w-3 h-3 text-black ml-0.5" fill="currentColor" viewBox="0 0 20 20">
                                   <path d="M6.3 5.84a.5.5 0 01.77-.42l7.15 4.16a.5.5 0 010 .84l-7.15 4.16a.5.5 0 01-.77-.42V5.84z" />
                                 </svg>
                               </div>

@@ -15,29 +15,21 @@ function getThumbnailPath(imagePath) {
   return `${directory}${fileName.startsWith('thumb-') ? fileName : `thumb-${fileName}`}`;
 }
 
-// Cloudflare Stream Video Player Component
-function StreamVideoPlayer({ videoId, customerCode, title, thumbnailPath }) {
-  // controls=true 显示默认控件：播放/暂停、进度条、音量、全屏
-  // poster 需要完整的 URL，构造完整路径
-  const getPosterUrl = () => {
-    if (!thumbnailPath) return '';
-    // 构造完整 URL（使用当前域名 + 路径 + .jpg）
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    const fullPath = `${baseUrl}${thumbnailPath}.jpg`;
-    return `&poster=${encodeURIComponent(fullPath)}`;
-  };
-  
-  const src = `https://customer-${customerCode}.cloudflarestream.com/${videoId}/iframe?muted=true&preload=metadata&controls=true${getPosterUrl()}`;
-  
+// R2 Video Player Component
+function R2VideoPlayer({ mp4Url, title, thumbnailPath }) {
+  const posterUrl = thumbnailPath ? `${thumbnailPath}.jpg` : '';
+
   return (
     <div className="relative w-full bg-black rounded-sm overflow-hidden" style={{ paddingTop: '56.25%' }}>
-      <iframe
-        src={src}
+      <video
+        src={mp4Url}
         title={title || 'Video'}
+        poster={posterUrl}
+        controls
+        muted
+        preload="metadata"
         className="absolute top-0 left-0 w-full h-full z-10"
-        style={{ border: 'none' }}
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen"
-        allowFullScreen
+        playsInline
       />
     </div>
   );
@@ -201,9 +193,8 @@ export function ProjectDetailPage() {
         {currentItem?.type === 'video' ? (
           <div className="w-full h-full flex items-center justify-center pb-20 md:pb-0">
             <div className="w-full max-w-5xl mx-auto px-4 md:px-8">
-              <StreamVideoPlayer
-                videoId={currentItem.videoId}
-                customerCode={currentItem.customerCode}
+              <R2VideoPlayer
+                mp4Url={currentItem.mp4Url}
                 title={currentItem.title || getProjectName(project, lang)}
                 thumbnailPath={currentItem.thumbnail}
               />

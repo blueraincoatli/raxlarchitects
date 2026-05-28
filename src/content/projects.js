@@ -335,32 +335,27 @@ export const projects = [
     // 5个秀场视频（2009-2016），按年份从新到旧排列
     videos: [
       {
-        videoId: '327692a29a92e389049f71ed6230e6d2',
-        customerCode: 'vi3l2h3rpgipaodm',
+        mp4Url: 'https://video.raxlarchitects.com/2016_content_pepsi.mp4',
         title: 'Content Show 2016',
         thumbnail: '/images/projects/content-show/showVideoCover05',
       },
       {
-        videoId: 'fe071957cbbb50eb0314b1147d5bc223',
-        customerCode: 'vi3l2h3rpgipaodm',
+        mp4Url: 'https://video.raxlarchitects.com/2014_content_264.mp4',
         title: 'Content Show 2014',
         thumbnail: '/images/projects/content-show/showVideoCover04',
       },
       {
-        videoId: 'db094d62df6790c05dc08069dde73673',
-        customerCode: 'vi3l2h3rpgipaodm',
+        mp4Url: 'https://video.raxlarchitects.com/2013_Transparent_Hallucinogen.mp4',
         title: 'Content Show 2013',
         thumbnail: '/images/projects/content-show/showVideoCover03',
       },
       {
-        videoId: 'a8c0a8703a7dfc6ddf27b498ab4f5dae',
-        customerCode: 'vi3l2h3rpgipaodm',
+        mp4Url: 'https://video.raxlarchitects.com/2011_CONTENT_WHATCHING_WHATCHED.mp4',
         title: 'Content Show 2011',
         thumbnail: '/images/projects/content-show/showVideoCover02',
       },
       {
-        videoId: 'dc28c93e5c07da9a8fafa1e733373cab',
-        customerCode: 'vi3l2h3rpgipaodm',
+        mp4Url: 'https://video.raxlarchitects.com/2009_content_body_on_body.mp4',
         title: 'Body on Body 2009',
         thumbnail: '/images/projects/content-show/showVideoCover01',
       },
